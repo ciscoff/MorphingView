@@ -2,9 +2,13 @@
 <resources>
 
     <dimen name="corner_radius_2dp">2dp</dimen>
+    <dimen name="corner_radius_4dp">4dp</dimen>
     <dimen name="corner_radius_56dp">56dp</dimen>
     <dimen name="button_rectangle_width">200dp</dimen>
     <dimen name="button_rectangle_height">56dp</dimen>
+    <dimen name="button_progress_height">8dp</dimen>
     <dimen name="button_square">56dp</dimen>
+
+    <dimen name="margin_20dp">20dp</dimen>
 
 </resources>

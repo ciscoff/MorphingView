@@ -1,11 +1,16 @@
 package dev.barabu.morph
 
+import android.graphics.Color
 import android.os.Bundle
+import dev.barabu.morph.button.MorphingButton
+import dev.barabu.morph.button.ProgressButton
 import dev.barabu.morph.databinding.ActivityMainBinding
 
 class MainActivity : BaseActivity() {
 
-    private var isRectButtonText = true
+    private var isRectButtonInTextMode = true
+    private var isLinearProgressButtonInTextMode = true
+    private var isCycleProgressButtonInTextMode = true
 
     private val viewBinding by lazy(LazyThreadSafetyMode.NONE) {
         ActivityMainBinding.inflate(layoutInflater)
@@ -18,12 +23,37 @@ class MainActivity : BaseActivity() {
         viewBinding.buttonText.apply {
             setOnClickListener {
 
-                if (isRectButtonText) {
+                if (isRectButtonInTextMode) {
                     morphToSuccess(this)
                 } else {
                     morphToRect(this, this@MainActivity.integer(R.integer.animation_duration))
                 }
-                isRectButtonText = !isRectButtonText
+                isRectButtonInTextMode = !isRectButtonInTextMode
+            }
+            morphToRect(this, 0)
+        }
+
+        viewBinding.buttonProgressLinear.apply {
+            setOnClickListener {
+                if (isLinearProgressButtonInTextMode) {
+                    morphToLinearProgress(this)
+                } else {
+                    morphToRect(this, this@MainActivity.integer(R.integer.animation_duration))
+                }
+                isLinearProgressButtonInTextMode = !isLinearProgressButtonInTextMode
+            }
+            morphToRect(this, 0)
+        }
+
+        viewBinding.buttonProgressCycle.apply {
+            setOnClickListener {
+
+                if(isCycleProgressButtonInTextMode) {
+                    morphToCycleProgress(this)
+                } else {
+                    morphToRect(this, this@MainActivity.integer(R.integer.animation_duration))
+                }
+                isCycleProgressButtonInTextMode = !isCycleProgressButtonInTextMode
             }
             morphToRect(this, 0)
         }
@@ -53,5 +83,41 @@ class MainActivity : BaseActivity() {
             icon = R.drawable.ic_done
         )
         button.morph(params)
+    }
+
+    private fun morphToLinearProgress(button: ProgressButton) {
+        val progressColor = Color.RED
+        val color = Color.GRAY
+        val progressCornerRadius = dimen(R.dimen.corner_radius_4dp)
+        val width = dimen(R.dimen.button_rectangle_width).toInt()
+        val height = dimen(R.dimen.button_progress_height).toInt()
+        val duration = integer(R.integer.animation_duration)
+
+        button.morphToProgress(
+            color,
+            progressColor,
+            progressCornerRadius,
+            width,
+            height,
+            duration
+        )
+    }
+
+    private fun morphToCycleProgress(button: ProgressButton) {
+        val progressColor = Color.RED
+        val color = Color.GRAY
+        val progressCornerRadius = dimen(R.dimen.corner_radius_56dp)
+        val width = dimen(R.dimen.button_rectangle_height).toInt()
+        val height = dimen(R.dimen.button_rectangle_height).toInt()
+        val duration = integer(R.integer.animation_duration)
+
+        button.morphToProgress(
+            color,
+            progressColor,
+            progressCornerRadius,
+            width,
+            height,
+            duration
+        )
     }
 }

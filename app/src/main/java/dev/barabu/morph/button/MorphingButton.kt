@@ -1,5 +1,6 @@
-package dev.barabu.morph
+package dev.barabu.morph.button
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
@@ -9,11 +10,14 @@ import android.util.StateSet
 import androidx.annotation.DrawableRes
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.content.ContextCompat
+import dev.barabu.morph.GradientDrawableDelegate
+import dev.barabu.morph.R
 
 /**
  * БЛЯ !!!!
  *
- * Тут обязательно нужно использовать ЯВНЫЕ конструкторы, а не '@JvmOverloads constructor'.
+ * Тут обязательно нужно использовать ЯВНЫЕ конструкторы, а не '@JvmOverloads constructor' с блоком
+ * init {}.
  *
  * Дело в том, что перед тем как вызвать initView() обязательно должен отработать конструктор
  * суперкласса. Именно он прочитает все атрибуты из XML и инициализирует внутренние переменные
@@ -23,8 +27,11 @@ import androidx.core.content.ContextCompat
  * комбинации сахара и блока init {} (в котором тот же код что и в initView()) мы получаем
  * неинициализированную кнопку, а именнно - текст прижат в левый верхний угол, буквы не заглавные,
  * паддинги не определены и равны 0.
+ *
+ * NOTE: Запомни, что блок init {} - это часть primary конструктора и он отработает раньше
+ * конструктора кнопки !!!
  */
-class MorphingButton : AppCompatButton {
+open class MorphingButton : AppCompatButton {
 
     constructor(context: Context) : super(context) {
         initView()
@@ -43,7 +50,7 @@ class MorphingButton : AppCompatButton {
     private var colorPressed = ContextCompat.getColor(context, android.R.color.holo_blue_dark)
     private var strokeColor = Color.TRANSPARENT
     private var strokeWidth = STROKE_WIDTH_ZERO
-    private var isAnimationInProgress: Boolean = false
+    protected var isMorphingInProgress: Boolean = false
 
     private fun initView() {
         padding = Padding(paddingLeft, paddingTop, paddingRight, paddingBottom)
@@ -58,8 +65,8 @@ class MorphingButton : AppCompatButton {
         setBackground(background)
     }
 
-    fun morph(params: Params) {
-        if (isAnimationInProgress) {
+    open fun morph(params: Params) {
+        if (isMorphingInProgress) {
             return
         }
 
@@ -82,6 +89,16 @@ class MorphingButton : AppCompatButton {
         cornerRadius = params.cornerRadius
     }
 
+    @SuppressLint("ClickableViewAccessibility")
+    fun blockTouch() {
+        setOnTouchListener { _, _ -> true }
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    fun unBlockTouch() {
+        setOnTouchListener { _, _ -> false }
+    }
+
     private fun morphWithoutAnimation(params: Params) {
         drawableNormal.apply {
             color = params.colorNormal
@@ -100,7 +117,7 @@ class MorphingButton : AppCompatButton {
     }
 
     private fun morphWithAnimation(params: Params) {
-        isAnimationInProgress = true
+        isMorphingInProgress = true
 
         // Убрать текст и иконку
         text = null
@@ -124,11 +141,13 @@ class MorphingButton : AppCompatButton {
             duration = params.duration,
             animationListener = object : MorphingAnimation.Listener {
                 override fun onAnimationStart() {
+                    params.animationListener?.onAnimationStart()
                     isClickable = false
                 }
 
                 override fun onAnimationEnd() {
                     isClickable = true
+                    params.animationListener?.onAnimationEnd()
                     finalizeMorphing(params)
                 }
             }
@@ -140,7 +159,7 @@ class MorphingButton : AppCompatButton {
      * После изменения формы и цвета кнопки добавить текст и иконку
      */
     private fun finalizeMorphing(params: Params) {
-        isAnimationInProgress = false
+        isMorphingInProgress = false
 
         when {
             params.icon != 0 && params.text != null -> {

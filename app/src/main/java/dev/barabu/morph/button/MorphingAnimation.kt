@@ -1,4 +1,4 @@
-package dev.barabu.morph
+package dev.barabu.morph.button
 
 import android.animation.AnimatorSet
 import android.animation.ArgbEvaluator
