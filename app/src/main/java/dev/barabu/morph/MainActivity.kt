@@ -1,7 +1,7 @@
 package dev.barabu.morph
 
-import android.graphics.Color
 import android.os.Bundle
+import androidx.core.content.ContextCompat
 import dev.barabu.morph.button.MorphingButton
 import dev.barabu.morph.button.ProgressButton
 import dev.barabu.morph.databinding.ActivityMainBinding
@@ -11,6 +11,7 @@ class MainActivity : BaseActivity() {
     private var isRectButtonInTextMode = true
     private var isLinearProgressButtonInTextMode = true
     private var isCycleProgressButtonInTextMode = true
+    private var isGradientCycleProgressButtonInTextMode = true
 
     private val viewBinding by lazy(LazyThreadSafetyMode.NONE) {
         ActivityMainBinding.inflate(layoutInflater)
@@ -48,7 +49,7 @@ class MainActivity : BaseActivity() {
         viewBinding.buttonProgressCycle.apply {
             setOnClickListener {
 
-                if(isCycleProgressButtonInTextMode) {
+                if (isCycleProgressButtonInTextMode) {
                     morphToCycleProgress(this)
                 } else {
                     morphToRect(this, this@MainActivity.integer(R.integer.animation_duration))
@@ -56,6 +57,20 @@ class MainActivity : BaseActivity() {
                 isCycleProgressButtonInTextMode = !isCycleProgressButtonInTextMode
             }
             morphToRect(this, 0)
+        }
+
+        viewBinding.buttonProgressCycleGradient.apply {
+            setOnClickListener {
+
+                if (isGradientCycleProgressButtonInTextMode) {
+                    morphToCycleProgress(this)
+                } else {
+                    morphToRect(this, this@MainActivity.integer(R.integer.animation_duration))
+                }
+                isGradientCycleProgressButtonInTextMode = !isGradientCycleProgressButtonInTextMode
+            }
+            morphToRect(this, 0)
+
         }
     }
 
@@ -86,8 +101,12 @@ class MainActivity : BaseActivity() {
     }
 
     private fun morphToLinearProgress(button: ProgressButton) {
-        val progressColor = Color.RED
-        val color = Color.GRAY
+        val color =
+            ContextCompat.getColor(this, R.color.cycle_progress_clipping)
+        val progressBackgroundColor =
+            ContextCompat.getColor(this, R.color.cycle_progress_background)
+        val progressColor =
+            ContextCompat.getColor(this, R.color.cycle_progress_foreground)
         val progressCornerRadius = dimen(R.dimen.corner_radius_4dp)
         val width = dimen(R.dimen.button_rectangle_width).toInt()
         val height = dimen(R.dimen.button_progress_height).toInt()
@@ -96,6 +115,7 @@ class MainActivity : BaseActivity() {
         button.morphToProgress(
             color,
             progressColor,
+            progressBackgroundColor,
             progressCornerRadius,
             width,
             height,
@@ -104,8 +124,12 @@ class MainActivity : BaseActivity() {
     }
 
     private fun morphToCycleProgress(button: ProgressButton) {
-        val progressColor = Color.RED
-        val color = Color.GRAY
+        val color =
+            ContextCompat.getColor(this, R.color.cycle_progress_clipping)
+        val progressBackgroundColor =
+            ContextCompat.getColor(this, R.color.cycle_progress_background)
+        val progressColor =
+            ContextCompat.getColor(this, R.color.cycle_progress_foreground)
         val progressCornerRadius = dimen(R.dimen.corner_radius_56dp)
         val width = dimen(R.dimen.button_rectangle_height).toInt()
         val height = dimen(R.dimen.button_rectangle_height).toInt()
@@ -114,6 +138,30 @@ class MainActivity : BaseActivity() {
         button.morphToProgress(
             color,
             progressColor,
+            progressBackgroundColor,
+            progressCornerRadius,
+            width,
+            height,
+            duration
+        )
+    }
+
+    private fun morphToGradientCycleProgress(button: ProgressButton) {
+        val color =
+            ContextCompat.getColor(this, R.color.cycle_progress_clipping)
+        val progressBackgroundColor =
+            ContextCompat.getColor(this, R.color.cycle_progress_background)
+        val progressColor =
+            ContextCompat.getColor(this, R.color.cycle_progress_foreground)
+        val progressCornerRadius = dimen(R.dimen.corner_radius_56dp)
+        val width = dimen(R.dimen.button_rectangle_height).toInt()
+        val height = dimen(R.dimen.button_rectangle_height).toInt()
+        val duration = integer(R.integer.animation_duration)
+
+        button.morphToProgress(
+            color,
+            progressColor,
+            progressBackgroundColor,
             progressCornerRadius,
             width,
             height,

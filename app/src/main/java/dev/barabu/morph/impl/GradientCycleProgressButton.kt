@@ -1,10 +1,7 @@
 package dev.barabu.morph.impl
 
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.RectF
+import android.graphics.*
 import android.util.AttributeSet
 import dev.barabu.morph.R
 import dev.barabu.morph.button.MorphingAnimation
@@ -15,17 +12,19 @@ import dev.barabu.morph.generator.ProgressGenerator
 import dev.barabu.morph.generator.ProgressGenerator.Companion.MAX_PROGRESS
 import dev.barabu.morph.generator.ProgressGenerator.Companion.MIN_PROGRESS
 
-class CycleProgressButton : MorphingButton, ProgressButton {
+class GradientCycleProgressButton : MorphingButton, ProgressButton {
 
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
 
     private val progressStrokeWidth = resources.getDimension(R.dimen.cycle_progress_stroke_width)
     private var progressCornerRadius = resources.getDimension(R.dimen.corner_radius_2dp)
-    private var progressBackgroundColor: Int = Color.TRANSPARENT
-    private var progressColor: Int = Color.TRANSPARENT
-    private var color: Int = Color.TRANSPARENT
+    private var gradientEndColor: Int = Color.TRANSPARENT
+    private var gradientStartColor: Int = Color.TRANSPARENT
+    private var centerClipColor: Int = Color.TRANSPARENT
     private var progress: Int = MIN_PROGRESS
+
+    lateinit var sweepGradient: SweepGradient
 
     private val paintProgress: Paint = Paint().apply {
         isAntiAlias = true
@@ -47,37 +46,40 @@ class CycleProgressButton : MorphingButton, ProgressButton {
 
         if (!isMorphingInProgress && progress > MIN_PROGRESS && progress <= MAX_PROGRESS) {
 
-            // Область для рисования индикатора прогресса
-            progressRect.apply {
-                left = 0f
-                top = 0f
-                bottom = height.toFloat()
-                right = width.toFloat()
+            canvas?.let { c ->
+
+                // Область для рисования индикатора прогресса
+                progressRect.apply {
+                    left = 0f
+                    top = 0f
+                    bottom = height.toFloat()
+                    right = width.toFloat()
+                }
+                paintProgress.shader = sweepGradient
+
+                c.apply {
+                    save()
+                    rotate(360f * (progress.toFloat() / MAX_PROGRESS), width / 2f, height / 2f)
+                    drawArc(
+                        progressRect,
+                        0f,
+                        360f,
+                        true,
+                        paintProgress
+                    )
+                    restore()
+                }
+
+                // Clipping в центре в форме круга
+                progressRect.apply {
+                    left = progressStrokeWidth
+                    top = progressStrokeWidth
+                    bottom = height.toFloat() - progressStrokeWidth
+                    right = width.toFloat() - progressStrokeWidth
+                }
+                paintClipCycle.color = centerClipColor
+                c.drawOval(progressRect, paintClipCycle)
             }
-
-            // Фон для прогресса (круг)
-            paintProgress.color = progressBackgroundColor
-            canvas?.drawOval(progressRect, paintProgress)
-
-            // Индикатор прогресса поверх фона (Arc)
-            paintProgress.color = progressColor
-            canvas?.drawArc(
-                progressRect,
-                360f * (progress.toFloat() / MAX_PROGRESS),
-                SWEEP_ANGLE,
-                true,
-                paintProgress
-            )
-
-            // Clipping в центре в форме круга
-            progressRect.apply {
-                left = progressStrokeWidth
-                top = progressStrokeWidth
-                bottom = height.toFloat() - progressStrokeWidth
-                right = width.toFloat() - progressStrokeWidth
-            }
-            paintClipCycle.color = color
-            canvas?.drawOval(progressRect, paintClipCycle)
         }
     }
 
@@ -91,10 +93,13 @@ class CycleProgressButton : MorphingButton, ProgressButton {
         duration: Int,
     ) {
 
-        this.color = color
-        this.progressColor = progressColor
+        this.centerClipColor = color
+        this.gradientEndColor = progressColor
+        this.gradientStartColor = progressBackgroundColor
         this.progressCornerRadius = progressCornerRadius
-        this.progressBackgroundColor = progressBackgroundColor
+
+        this.sweepGradient =
+            SweepGradient(width / 2f, height / 2f, progressColor, progressBackgroundColor)
 
         val generator = LinearProgressGenerator(object : ProgressGenerator.OnCompleteListener {
             override fun onComplete() {
@@ -118,7 +123,7 @@ class CycleProgressButton : MorphingButton, ProgressButton {
 
                 // Сразу после морфа формы кнопки запускаем анимацию прогресса
                 override fun onAnimationEnd() {
-                    generator.start(this@CycleProgressButton)
+                    generator.start(this@GradientCycleProgressButton)
                 }
             }
         )
@@ -128,10 +133,6 @@ class CycleProgressButton : MorphingButton, ProgressButton {
     override fun updateProgress(progress: Int) {
         this.progress = progress
         invalidate()
-    }
-
-    companion object {
-        private const val SWEEP_ANGLE = 80f
     }
 }
 

@@ -1,26 +1,24 @@
-package dev.barabu.morph.impl
+package dev.barabu.morph.generator
 
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import dev.barabu.morph.button.ProgressButton
+import dev.barabu.morph.generator.ProgressGenerator.Companion.MAX_PROGRESS
+import dev.barabu.morph.generator.ProgressGenerator.Companion.MIN_PROGRESS
 import kotlin.random.Random
 
-class ProgressGenerator(private val listener: OnCompleteListener) {
-
-    interface OnCompleteListener {
-        fun onComplete()
-    }
+class IndeterminateProgressGenerator(
+    private val listener: ProgressGenerator.OnCompleteListener
+) : ProgressGenerator {
 
     private var progress = MIN_PROGRESS
     private val handler = Handler(Looper.getMainLooper())
 
-    fun start(consumer: ProgressButton, delay: Long) {
+    override fun start(consumer: ProgressButton, delay: Long) {
 
         handler.postDelayed(object : Runnable {
             override fun run() {
                 progress += PROGRESS_STEP
-                Log.d("LOG_TAG", "progress=$progress")
 
                 if (progress > MAX_PROGRESS) {
                     listener.onComplete()
@@ -32,15 +30,13 @@ class ProgressGenerator(private val listener: OnCompleteListener) {
         }, delay)
     }
 
-    fun start(consumer: ProgressButton) {
+    override fun start(consumer: ProgressButton) {
         start(consumer, MIN_DELAY)
     }
 
     companion object {
-        const val MAX_PROGRESS = 100
-        const val MIN_PROGRESS = 0
-        const val PROGRESS_STEP = 5
-        const val MIN_DELAY = 10L
-        const val MAX_DELAY = 300L
+        private const val PROGRESS_STEP = 5
+        private const val MIN_DELAY = 10L
+        private const val MAX_DELAY = 300L
     }
 }

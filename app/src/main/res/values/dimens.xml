@@ -8,6 +8,7 @@
     <dimen name="button_rectangle_height">56dp</dimen>
     <dimen name="button_progress_height">8dp</dimen>
     <dimen name="button_square">56dp</dimen>
+    <dimen name="cycle_progress_stroke_width">5dp</dimen>
 
     <dimen name="margin_20dp">20dp</dimen>
 

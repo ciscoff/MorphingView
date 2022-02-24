@@ -10,8 +10,10 @@ import dev.barabu.morph.R
 import dev.barabu.morph.button.MorphingAnimation
 import dev.barabu.morph.button.MorphingButton
 import dev.barabu.morph.button.ProgressButton
-import dev.barabu.morph.impl.ProgressGenerator.Companion.MAX_PROGRESS
-import dev.barabu.morph.impl.ProgressGenerator.Companion.MIN_PROGRESS
+import dev.barabu.morph.generator.IndeterminateProgressGenerator
+import dev.barabu.morph.generator.ProgressGenerator
+import dev.barabu.morph.generator.ProgressGenerator.Companion.MAX_PROGRESS
+import dev.barabu.morph.generator.ProgressGenerator.Companion.MIN_PROGRESS
 
 class LinearProgressButton : MorphingButton, ProgressButton {
 
@@ -19,6 +21,7 @@ class LinearProgressButton : MorphingButton, ProgressButton {
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
 
     private var progressCornerRadius = resources.getDimension(R.dimen.corner_radius_2dp)
+    private var progressBackgroundColor: Int = Color.TRANSPARENT
     private var progressColor: Int = Color.TRANSPARENT
     private var progress: Int = MIN_PROGRESS
 
@@ -50,6 +53,7 @@ class LinearProgressButton : MorphingButton, ProgressButton {
     override fun morphToProgress(
         color: Int,
         progressColor: Int,
+        progressBackgroundColor: Int,
         progressCornerRadius: Float,
         width: Int,
         height: Int,
@@ -58,13 +62,16 @@ class LinearProgressButton : MorphingButton, ProgressButton {
 
         this.progressColor = progressColor
         this.progressCornerRadius = progressCornerRadius
+        this.progressBackgroundColor = progressBackgroundColor
 
-        val generator = ProgressGenerator(object : ProgressGenerator.OnCompleteListener {
-            override fun onComplete() {
-                progress = MIN_PROGRESS
-                unBlockTouch()
-            }
-        })
+        val generator =
+            IndeterminateProgressGenerator(
+                object : ProgressGenerator.OnCompleteListener {
+                    override fun onComplete() {
+                        progress = MIN_PROGRESS
+                        unBlockTouch()
+                    }
+                })
 
         blockTouch()
 
