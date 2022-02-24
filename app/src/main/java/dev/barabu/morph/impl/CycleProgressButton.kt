@@ -6,26 +6,28 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.RectF
 import android.util.AttributeSet
+import androidx.annotation.DrawableRes
 import dev.barabu.morph.R
 import dev.barabu.morph.button.MorphingAnimation
 import dev.barabu.morph.button.MorphingButton
-import dev.barabu.morph.button.ProgressButton
+import dev.barabu.morph.button.MorphStateController
+import dev.barabu.morph.button.ProgressConsumer
 import dev.barabu.morph.generator.LinearProgressGenerator
 import dev.barabu.morph.generator.ProgressGenerator
 import dev.barabu.morph.generator.ProgressGenerator.Companion.MAX_PROGRESS
 import dev.barabu.morph.generator.ProgressGenerator.Companion.MIN_PROGRESS
 
-class CycleProgressButton : MorphingButton, ProgressButton {
+class CycleProgressButton : MorphingButton, MorphStateController, ProgressConsumer {
 
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
 
-    private val progressStrokeWidth = resources.getDimension(R.dimen.cycle_progress_stroke_width)
-    private var progressCornerRadius = resources.getDimension(R.dimen.corner_radius_2dp)
-    private var progressBackgroundColor: Int = Color.TRANSPARENT
-    private var progressColor: Int = Color.TRANSPARENT
     private var color: Int = Color.TRANSPARENT
     private var progress: Int = MIN_PROGRESS
+    private var progressPrimaryColor: Int = Color.TRANSPARENT
+    private var progressSecondaryColor: Int = Color.TRANSPARENT
+    private val progressStrokeWidth = resources.getDimension(R.dimen.cycle_progress_stroke_width)
+    private var progressCornerRadius = resources.getDimension(R.dimen.corner_radius_2dp)
 
     private val paintProgress: Paint = Paint().apply {
         isAntiAlias = true
@@ -56,11 +58,11 @@ class CycleProgressButton : MorphingButton, ProgressButton {
             }
 
             // Фон для прогресса (круг)
-            paintProgress.color = progressBackgroundColor
+            paintProgress.color = progressSecondaryColor
             canvas?.drawOval(progressRect, paintProgress)
 
             // Индикатор прогресса поверх фона (Arc)
-            paintProgress.color = progressColor
+            paintProgress.color = progressPrimaryColor
             canvas?.drawArc(
                 progressRect,
                 360f * (progress.toFloat() / MAX_PROGRESS),
@@ -83,8 +85,8 @@ class CycleProgressButton : MorphingButton, ProgressButton {
 
     override fun morphToProgress(
         color: Int,
-        progressColor: Int,
-        progressBackgroundColor: Int,
+        progressPrimaryColor: Int,
+        progressSecondaryColor: Int,
         progressCornerRadius: Float,
         width: Int,
         height: Int,
@@ -92,9 +94,9 @@ class CycleProgressButton : MorphingButton, ProgressButton {
     ) {
 
         this.color = color
-        this.progressColor = progressColor
+        this.progressPrimaryColor = progressPrimaryColor
         this.progressCornerRadius = progressCornerRadius
-        this.progressBackgroundColor = progressBackgroundColor
+        this.progressSecondaryColor = progressSecondaryColor
 
         val generator = LinearProgressGenerator(object : ProgressGenerator.OnCompleteListener {
             override fun onComplete() {
@@ -123,6 +125,19 @@ class CycleProgressButton : MorphingButton, ProgressButton {
             }
         )
         morph(params)
+    }
+
+    override fun morphToState(
+        state: MorphStateController.State,
+        colorNormal: Int,
+        colorPressed: Int,
+        cornerRadius: Float,
+        width: Int,
+        height: Int,
+        duration: Int,
+        @DrawableRes iconId: Int
+    ) {
+        TODO("Not yet implemented")
     }
 
     override fun updateProgress(progress: Int) {

@@ -3,16 +3,18 @@ package dev.barabu.morph.impl
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
+import androidx.annotation.DrawableRes
 import dev.barabu.morph.R
 import dev.barabu.morph.button.MorphingAnimation
 import dev.barabu.morph.button.MorphingButton
-import dev.barabu.morph.button.ProgressButton
+import dev.barabu.morph.button.MorphStateController
+import dev.barabu.morph.button.ProgressConsumer
 import dev.barabu.morph.generator.LinearProgressGenerator
 import dev.barabu.morph.generator.ProgressGenerator
 import dev.barabu.morph.generator.ProgressGenerator.Companion.MAX_PROGRESS
 import dev.barabu.morph.generator.ProgressGenerator.Companion.MIN_PROGRESS
 
-class GradientCycleProgressButton : MorphingButton, ProgressButton {
+class GradientCycleProgressButton : MorphingButton, MorphStateController, ProgressConsumer {
 
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
@@ -85,8 +87,8 @@ class GradientCycleProgressButton : MorphingButton, ProgressButton {
 
     override fun morphToProgress(
         color: Int,
-        progressColor: Int,
-        progressBackgroundColor: Int,
+        progressPrimaryColor: Int,
+        progressSecondaryColor: Int,
         progressCornerRadius: Float,
         width: Int,
         height: Int,
@@ -94,12 +96,12 @@ class GradientCycleProgressButton : MorphingButton, ProgressButton {
     ) {
 
         this.centerClipColor = color
-        this.gradientEndColor = progressColor
-        this.gradientStartColor = progressBackgroundColor
+        this.gradientEndColor = progressPrimaryColor
+        this.gradientStartColor = progressSecondaryColor
         this.progressCornerRadius = progressCornerRadius
 
         this.sweepGradient =
-            SweepGradient(width / 2f, height / 2f, progressColor, progressBackgroundColor)
+            SweepGradient(width / 2f, height / 2f, progressPrimaryColor, progressSecondaryColor)
 
         val generator = LinearProgressGenerator(object : ProgressGenerator.OnCompleteListener {
             override fun onComplete() {
@@ -128,6 +130,19 @@ class GradientCycleProgressButton : MorphingButton, ProgressButton {
             }
         )
         morph(params)
+    }
+
+    override fun morphToState(
+        state: MorphStateController.State,
+        colorNormal: Int,
+        colorPressed: Int,
+        cornerRadius: Float,
+        width: Int,
+        height: Int,
+        duration: Int,
+        @DrawableRes iconId: Int
+    ) {
+        TODO("Not yet implemented")
     }
 
     override fun updateProgress(progress: Int) {

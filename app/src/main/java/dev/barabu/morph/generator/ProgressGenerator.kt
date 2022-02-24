@@ -1,6 +1,6 @@
 package dev.barabu.morph.generator
 
-import dev.barabu.morph.button.ProgressButton
+import dev.barabu.morph.button.ProgressConsumer
 
 interface ProgressGenerator {
 
@@ -8,10 +8,10 @@ interface ProgressGenerator {
         fun onComplete()
     }
 
-    fun start(consumer: ProgressButton, delay: Long) {
+    fun start(consumer: ProgressConsumer, delay: Long) {
     }
 
-    fun start(consumer: ProgressButton) {
+    fun start(consumer: ProgressConsumer) {
     }
 
     companion object {
