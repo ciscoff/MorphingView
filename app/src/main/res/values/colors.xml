@@ -7,4 +7,8 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="cycle_progress_foreground">#388e3c</color>
+    <color name="cycle_progress_background">#d7ffd9</color>
+    <color name="cycle_progress_clipping">#ffffff</color>
 </resources>
