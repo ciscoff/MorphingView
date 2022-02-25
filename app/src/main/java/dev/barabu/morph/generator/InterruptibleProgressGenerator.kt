@@ -5,12 +5,8 @@ import android.os.Looper
 import dev.barabu.morph.button.ProgressConsumer
 
 class InterruptibleProgressGenerator(
-    private val listener: OnCompleteListener
+    private val listener: ProgressGenerator.OnCompleteListener
 ) : ProgressGenerator {
-
-    interface OnCompleteListener {
-        fun onComplete()
-    }
 
     private var progress = ProgressGenerator.MIN_PROGRESS
     private val handler = Handler(Looper.getMainLooper())

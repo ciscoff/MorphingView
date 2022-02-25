@@ -8,10 +8,7 @@ import android.graphics.RectF
 import android.util.AttributeSet
 import androidx.annotation.DrawableRes
 import dev.barabu.morph.R
-import dev.barabu.morph.button.MorphingAnimation
-import dev.barabu.morph.button.MorphingButton
-import dev.barabu.morph.button.MorphStateController
-import dev.barabu.morph.button.ProgressConsumer
+import dev.barabu.morph.button.*
 import dev.barabu.morph.generator.IndeterminateProgressGenerator
 import dev.barabu.morph.generator.ProgressGenerator
 import dev.barabu.morph.generator.ProgressGenerator.Companion.MAX_PROGRESS
@@ -97,8 +94,8 @@ class LinearProgressButton : MorphingButton, MorphStateController, ProgressConsu
         morph(params)
     }
 
-    override fun morphToState(
-        state: MorphStateController.State,
+    override fun morphToFinish(
+        result: OpResult,
         colorNormal: Int,
         colorPressed: Int,
         cornerRadius: Float,

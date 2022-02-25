@@ -2,55 +2,47 @@ package dev.barabu.morph.impl
 
 import android.content.Context
 import android.graphics.*
-import android.os.Build
 import android.util.AttributeSet
-import dev.barabu.morph.R
 import dev.barabu.morph.button.MorphingAnimation
-import dev.barabu.morph.button.MorphingButton
-import dev.barabu.morph.button.ProgressConsumer
+import dev.barabu.morph.button.ProgressMorphingButton
 import dev.barabu.morph.generator.InterruptibleProgressGenerator
 import dev.barabu.morph.generator.ProgressGenerator
+import dev.barabu.morph.generator.ProgressGenerator.Companion.MAX_PROGRESS
+import dev.barabu.morph.generator.ProgressGenerator.Companion.MIN_PROGRESS
 import kotlin.math.min
 
-class ProgressMorphingButton : MorphingButton, ProgressConsumer {
+class CircularColoredProgressButton : ProgressMorphingButton {
 
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
 
-    private val progressStrokeWidth = resources.getDimension(R.dimen.cycle_progress_stroke_width)
-    private var progressCornerRadius = resources.getDimension(R.dimen.corner_radius_2dp)
-    private var gradientStartColor: Int = Color.TRANSPARENT
-    private var gradientEndColor: Int = Color.TRANSPARENT
-    private var progress: Int = ProgressGenerator.MIN_PROGRESS
-
-    private lateinit var sweepGradient: SweepGradient
-
-    private val rectProgress = RectF()
-    private var clipPath: Path? = null
-
-    private val paintProgress: Paint = Paint().apply {
+    private val paintClipCircle: Paint = Paint().apply {
         isAntiAlias = true
         style = Paint.Style.FILL
     }
 
-    private var postProgressOp: (() -> Unit)? = null
+    private val rectProgress = RectF()
+    private var clipPath: Path? = null
 
-    private val generator = InterruptibleProgressGenerator(
-        object : InterruptibleProgressGenerator.OnCompleteListener {
+    override var generator: ProgressGenerator = InterruptibleProgressGenerator(
+        object : ProgressGenerator.OnCompleteListener {
             override fun onComplete() {
-                progress = ProgressGenerator.MIN_PROGRESS
+                progress = MIN_PROGRESS
                 postProgressOp?.invoke()
             }
         }
     )
 
     /**
-     * Метод вызывается при обновлении прогресса в диапазоне (MIN_PROGRESS < p <= MAX_PROGRESS)
+     * Этот метод работает только для рисования "линии прогресса"
      */
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
 
-        if (!isMorphingInProgress && progress > ProgressGenerator.MIN_PROGRESS && progress <= ProgressGenerator.MAX_PROGRESS) {
+        if (!isMorphingInProgress
+            && progress > MIN_PROGRESS
+            && progress <= MAX_PROGRESS
+        ) {
 
             val circleSize = min(width, height)
             val horMargin = (width - circleSize) / 2f
@@ -58,7 +50,6 @@ class ProgressMorphingButton : MorphingButton, ProgressConsumer {
             val clipWidth = circleSize - progressStrokeWidth * 2
 
             if (clipPath == null) {
-                paintProgress.shader = sweepGradient
 
                 val clipX = (width - clipWidth) / 2
                 val clipY = (height - clipWidth) / 2
@@ -75,6 +66,7 @@ class ProgressMorphingButton : MorphingButton, ProgressConsumer {
                 }
             }
 
+            // Область для рисования индикатора прогресса
             rectProgress.apply {
                 left = 0f
                 top = 0f
@@ -83,18 +75,31 @@ class ProgressMorphingButton : MorphingButton, ProgressConsumer {
             }
 
             canvas?.apply {
+
                 save()
                 drawColor(Color.TRANSPARENT)
+
+                // Clipping в центре в форме круга
                 clipRect(rectProgress)
                 clipPathCompat(canvas, clipPath!!)
-                rotate(360f * (progress.toFloat() / ProgressGenerator.MAX_PROGRESS), width / 2f, height / 2f)
+
+                rectProgress.apply {
+                    left = horMargin
+                    top = verMargin
+                    bottom = horMargin + circleSize
+                    right = verMargin + circleSize
+                }
+
+                // Фон для прогресса (круг)
+                paintProgress.color = secondaryColor
+                drawOval(rectProgress, paintProgress)
+
+                // Индикатор прогресса поверх фона (Arc)
+                paintProgress.color = primaryColor
                 drawArc(
-                    horMargin,
-                    verMargin,
-                    horMargin + circleSize,
-                    verMargin + circleSize,
-                    0f,
-                    360f,
+                    rectProgress,
+                    360f * (progress.toFloat() / MAX_PROGRESS),
+                    SWEEP_ANGLE,
                     true,
                     paintProgress
                 )
@@ -103,7 +108,7 @@ class ProgressMorphingButton : MorphingButton, ProgressConsumer {
         }
     }
 
-    fun morphToProgress(
+    override fun morphToProgress(
         color: Int,
         progressPrimaryColor: Int,
         progressSecondaryColor: Int,
@@ -112,12 +117,9 @@ class ProgressMorphingButton : MorphingButton, ProgressConsumer {
         height: Int,
         duration: Int,
     ) {
-        this.gradientEndColor = progressPrimaryColor
-        this.gradientStartColor = progressSecondaryColor
-        this.progressCornerRadius = progressCornerRadius
-
-        this.sweepGradient =
-            SweepGradient(width / 2f, height / 2f, progressPrimaryColor, progressSecondaryColor)
+        this.secondaryColor = progressPrimaryColor
+        this.primaryColor = progressSecondaryColor
+        this.cornerRadius = progressCornerRadius
 
         blockTouch()
 
@@ -134,14 +136,14 @@ class ProgressMorphingButton : MorphingButton, ProgressConsumer {
 
                 // Сразу после морфа формы кнопки запускаем анимацию прогресса
                 override fun onAnimationEnd() {
-                    generator.start(this@ProgressMorphingButton)
+                    generator.start(this@CircularColoredProgressButton)
                 }
             }
         )
         morph(params)
     }
 
-    fun morphToState(
+    override fun morphToFinish(
         colorNormal: Int,
         colorPressed: Int,
         cornerRadius: Float,
@@ -150,7 +152,7 @@ class ProgressMorphingButton : MorphingButton, ProgressConsumer {
         duration: Int,
         iconId: Int
     ) {
-        generator.interrupt()
+        (generator as InterruptibleProgressGenerator).interrupt()
 
         postProgressOp = {
             val params = Params(
@@ -179,19 +181,8 @@ class ProgressMorphingButton : MorphingButton, ProgressConsumer {
         invalidate()
     }
 
-    /**
-     * Region.Op.DIFFERENCE - для рисования выбирается область первого прямоугольника
-     * за исключением пересечения со вторым элементом. То есть а данном случае из отрисовки
-     * исключаем область заданную canvas.clipPath (у нас это круг).
-     *
-     * Визуально работу различных Region.Op можно посмотреть тут:
-     * https://startandroid.ru/ru/uroki/vse-uroki-spiskom/325-urok-147-risovanie-region.html
-     */
-    private fun clipPathCompat(canvas: Canvas, path: Path) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            canvas.clipOutPath(path)
-        } else {
-            canvas.clipPath(path, Region.Op.DIFFERENCE)
-        }
+    companion object {
+        private const val SWEEP_ANGLE = 60f
     }
 }
+

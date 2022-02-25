@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <dev.barabu.morph.impl.LinearProgressButton
-        android:id="@+id/button_progress_linear"
+        android:id="@+id/button_linear_progress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_20dp"
@@ -26,34 +26,25 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/button_text" />
 
-    <dev.barabu.morph.impl.CycleProgressButton
-        android:id="@+id/button_progress_cycle"
+    <dev.barabu.morph.impl.CircularColoredProgressButton
+        android:id="@+id/button_circular_colored_progress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_20dp"
         android:textColor="@android:color/white"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/button_progress_linear" />
+        app:layout_constraintTop_toBottomOf="@id/button_linear_progress" />
 
-    <dev.barabu.morph.impl.GradientCycleProgressButton
-        android:id="@+id/button_progress_cycle_gradient"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_20dp"
-        android:textColor="@android:color/white"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/button_progress_cycle" />
 
-    <dev.barabu.morph.impl.ProgressMorphingButton
-        android:id="@+id/button_multi_state"
+    <dev.barabu.morph.impl.CircularGradientProgressButton
+        android:id="@+id/button_circular_gradient_progress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_20dp"
         android:textColor="@android:color/white"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/button_progress_cycle_gradient"/>
+        app:layout_constraintTop_toBottomOf="@id/button_circular_colored_progress" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

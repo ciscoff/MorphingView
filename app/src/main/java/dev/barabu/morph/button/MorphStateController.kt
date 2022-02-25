@@ -4,12 +4,6 @@ import androidx.annotation.DrawableRes
 
 interface MorphStateController {
 
-    enum class State {
-        Progress,
-        Success,
-        Error
-    }
-
     fun morphToProgress(
         color: Int,
         progressPrimaryColor: Int,
@@ -20,8 +14,8 @@ interface MorphStateController {
         duration: Int,
     )
 
-    fun morphToState(
-        state: State,
+    fun morphToFinish(
+        result: OpResult,
         colorNormal: Int,
         colorPressed: Int,
         cornerRadius: Float,

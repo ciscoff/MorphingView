@@ -45,7 +45,7 @@ open class MorphingButton : AppCompatButton {
     private lateinit var drawablePressed: GradientDrawableDelegate
     private lateinit var padding: Padding
 
-    private var cornerRadius = resources.getDimension(R.dimen.corner_radius_2dp)
+    protected var cornerRadius = resources.getDimension(R.dimen.corner_radius_2dp)
     private var colorNormal = ContextCompat.getColor(context, android.R.color.holo_blue_light)
     private var colorPressed = ContextCompat.getColor(context, android.R.color.holo_blue_dark)
     private var strokeColor = Color.TRANSPARENT
