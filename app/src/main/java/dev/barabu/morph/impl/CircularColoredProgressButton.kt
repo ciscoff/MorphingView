@@ -16,11 +16,6 @@ class CircularColoredProgressButton : ProgressMorphingButton {
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
 
-    private val paintClipCircle: Paint = Paint().apply {
-        isAntiAlias = true
-        style = Paint.Style.FILL
-    }
-
     private val rectProgress = RectF()
     private var clipPath: Path? = null
 
@@ -106,41 +101,6 @@ class CircularColoredProgressButton : ProgressMorphingButton {
                 restore()
             }
         }
-    }
-
-    override fun morphToProgress(
-        color: Int,
-        progressPrimaryColor: Int,
-        progressSecondaryColor: Int,
-        progressCornerRadius: Float,
-        width: Int,
-        height: Int,
-        duration: Int,
-    ) {
-        this.secondaryColor = progressPrimaryColor
-        this.primaryColor = progressSecondaryColor
-        this.cornerRadius = progressCornerRadius
-
-        blockTouch()
-
-        val params = Params(
-            cornerRadius = progressCornerRadius,
-            width = width,
-            height = height,
-            colorNormal = color,
-            colorPressed = color,
-            duration = duration,
-            animationListener = object : MorphingAnimation.Listener {
-                override fun onAnimationStart() {
-                }
-
-                // Сразу после морфа формы кнопки запускаем анимацию прогресса
-                override fun onAnimationEnd() {
-                    generator.start(this@CircularColoredProgressButton)
-                }
-            }
-        )
-        morph(params)
     }
 
     override fun morphToFinish(

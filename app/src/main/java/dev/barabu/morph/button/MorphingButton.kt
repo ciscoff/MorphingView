@@ -42,15 +42,16 @@ open class MorphingButton : AppCompatButton {
     }
 
     lateinit var drawableNormal: GradientDrawableDelegate
-    private lateinit var drawablePressed: GradientDrawableDelegate
+    lateinit var drawablePressed: GradientDrawableDelegate
     private lateinit var padding: Padding
 
     protected var cornerRadius = resources.getDimension(R.dimen.corner_radius_2dp)
+    protected var isMorphingInProgress: Boolean = false
+
     private var colorNormal = ContextCompat.getColor(context, android.R.color.holo_blue_light)
     private var colorPressed = ContextCompat.getColor(context, android.R.color.holo_blue_dark)
     private var strokeColor = Color.TRANSPARENT
     private var strokeWidth = STROKE_WIDTH_ZERO
-    protected var isMorphingInProgress: Boolean = false
 
     private fun initView() {
         padding = Padding(paddingLeft, paddingTop, paddingRight, paddingBottom)

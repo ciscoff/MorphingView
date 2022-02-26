@@ -31,7 +31,7 @@ abstract class ProgressMorphingButton : MorphingButton, ProgressConsumer {
         invalidate()
     }
 
-    abstract fun morphToProgress(
+    open fun morphToProgress(
         color: Int,
         progressPrimaryColor: Int,
         progressSecondaryColor: Int,
@@ -39,7 +39,32 @@ abstract class ProgressMorphingButton : MorphingButton, ProgressConsumer {
         width: Int,
         height: Int,
         duration: Int,
-    )
+    ) {
+        this.cornerRadius = progressCornerRadius
+        this.primaryColor = progressPrimaryColor
+        this.secondaryColor = progressSecondaryColor
+
+        blockTouch()
+
+        val params = Params(
+            cornerRadius = progressCornerRadius,
+            width = width,
+            height = height,
+            colorNormal = color,
+            colorPressed = color,
+            duration = duration,
+            animationListener = object : MorphingAnimation.Listener {
+                override fun onAnimationStart() {
+                }
+
+                // Сразу после морфа формы кнопки запускаем анимацию прогресса
+                override fun onAnimationEnd() {
+                    generator.start(this@ProgressMorphingButton)
+                }
+            }
+        )
+        morph(params)
+    }
 
     abstract fun morphToFinish(
         colorNormal: Int,

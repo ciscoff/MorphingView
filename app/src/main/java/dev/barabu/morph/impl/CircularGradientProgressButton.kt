@@ -102,33 +102,19 @@ class CircularGradientProgressButton : ProgressMorphingButton {
         height: Int,
         duration: Int,
     ) {
-        this.secondaryColor = progressPrimaryColor
-        this.primaryColor = progressSecondaryColor
-        this.cornerRadius = progressCornerRadius
 
         this.sweepGradient =
             SweepGradient(width / 2f, height / 2f, progressPrimaryColor, progressSecondaryColor)
 
-        blockTouch()
-
-        val params = Params(
-            cornerRadius = progressCornerRadius,
-            width = width,
-            height = height,
-            colorNormal = color,
-            colorPressed = color,
-            duration = duration,
-            animationListener = object : MorphingAnimation.Listener {
-                override fun onAnimationStart() {
-                }
-
-                // Сразу после морфа формы кнопки запускаем анимацию прогресса
-                override fun onAnimationEnd() {
-                    generator.start(this@CircularGradientProgressButton)
-                }
-            }
+        super.morphToProgress(
+            color,
+            progressPrimaryColor,
+            progressSecondaryColor,
+            progressCornerRadius,
+            width,
+            height,
+            duration
         )
-        morph(params)
     }
 
     override fun morphToFinish(

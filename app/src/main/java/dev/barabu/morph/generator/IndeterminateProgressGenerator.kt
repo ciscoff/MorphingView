@@ -21,6 +21,7 @@ class IndeterminateProgressGenerator(
                 progress += PROGRESS_STEP
 
                 if (progress > MAX_PROGRESS) {
+                    progress = MIN_PROGRESS
                     listener.onComplete()
                 } else {
                     consumer.updateProgress(progress)
