@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.core.content.ContextCompat
+import dev.barabu.morph.button.AnchorIcon
 import dev.barabu.morph.button.MorphingButton
 import dev.barabu.morph.button.OpResult
 import dev.barabu.morph.button.ProgressMorphingButton
@@ -17,6 +18,7 @@ class MainActivity : BaseActivity() {
     private var isLinearProgressButtonInTextMode = true
     private var isCycleProgressButtonInTextMode = true
     private var isMultiStateButtonInTextMode = true
+    private var isMtsButtonInTextMode = true
 
     private val viewBinding by lazy(LazyThreadSafetyMode.NONE) {
         ActivityMainBinding.inflate(layoutInflater)
@@ -63,7 +65,9 @@ class MainActivity : BaseActivity() {
                         ContextCompat.getColor(
                             this@MainActivity,
                             R.color.cycle_progress_background
-                        )
+                        ),
+                        Color.TRANSPARENT,
+                        0f
                     )
                     Handler(Looper.getMainLooper()).postDelayed({
                         stopCircularProgress(
@@ -105,7 +109,9 @@ class MainActivity : BaseActivity() {
                         ContextCompat.getColor(
                             this@MainActivity,
                             R.color.cycle_progress_foreground
-                        )
+                        ),
+                        Color.TRANSPARENT,
+                        0f
                     )
                     Handler(Looper.getMainLooper()).postDelayed({
                         stopCircularProgress(
@@ -135,6 +141,53 @@ class MainActivity : BaseActivity() {
             }
             morphToRect(0)
         }
+
+        viewBinding.buttonMts.apply {
+
+            setOnClickListener {
+                if (isMtsButtonInTextMode) {
+                    startCircularProgress(
+                        ContextCompat.getColor(
+                            this@MainActivity,
+                            R.color.ds_mts_pink
+                        ),
+                        Color.WHITE,
+                        ContextCompat.getColor(
+                            this@MainActivity,
+                            R.color.ds_mts_red
+                        ),
+                        dimen(R.dimen.cycle_progress_padding_2dp)
+                    )
+
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        stopCircularProgress(
+                            OpResult.Success,
+                            ContextCompat.getColor(
+                                this@MainActivity,
+                                android.R.color.holo_blue_light
+                            ),
+                            ContextCompat.getColor(
+                                this@MainActivity,
+                                android.R.color.holo_blue_dark
+                            ),
+                            ContextCompat.getColor(
+                                this@MainActivity,
+                                android.R.color.holo_red_light
+                            ),
+                            ContextCompat.getColor(
+                                this@MainActivity,
+                                android.R.color.holo_red_dark
+                            )
+                        )
+                    }, 2000)
+
+                } else {
+                    morphToMtsRect(this@MainActivity.integer(R.integer.animation_duration))
+                }
+                isMtsButtonInTextMode = !isMtsButtonInTextMode
+            }
+            morphToMtsRect(0)
+        }
     }
 
     private fun MorphingButton.morphToRect(duration: Int) {
@@ -150,6 +203,20 @@ class MainActivity : BaseActivity() {
         morph(params)
     }
 
+    private fun MorphingButton.morphToMtsRect(duration: Int) {
+        val params = MorphingButton.Params(
+            cornerRadius = dimen(R.dimen.corner_radius_56dp),
+            width = dimen(R.dimen.button_rectangle_width).toInt(),
+            height = dimen(R.dimen.button_rectangle_height).toInt(),
+            colorNormal = color(R.color.ds_mts_red),
+            colorPressed = color(android.R.color.holo_red_dark),
+            duration = duration,
+            text = getString(R.string.text_button),
+            icon = AnchorIcon(0, 0, R.drawable.ic_send, 0)
+        )
+        morph(params)
+    }
+
     private fun MorphingButton.morphToSuccess() {
         val params = MorphingButton.Params(
             cornerRadius = dimen(R.dimen.corner_radius_56dp),
@@ -158,7 +225,7 @@ class MainActivity : BaseActivity() {
             colorNormal = color(android.R.color.holo_green_light),
             colorPressed = color(android.R.color.holo_green_dark),
             duration = integer(R.integer.animation_duration),
-            icon = R.drawable.ic_done
+            icon = AnchorIcon(l = R.drawable.ic_done)
         )
         morph(params)
     }
@@ -195,7 +262,9 @@ class MainActivity : BaseActivity() {
      */
     private fun ProgressMorphingButton.startCircularProgress(
         primaryColor: Int,
-        secondaryColor: Int
+        secondaryColor: Int,
+        backgroundColor: Int,
+        padding: Float
     ) {
         val progressCornerRadius = dimen(R.dimen.corner_radius_56dp)
         val width = dimen(R.dimen.button_rectangle_height).toInt()
@@ -210,13 +279,14 @@ class MainActivity : BaseActivity() {
         }
 
         morphToProgress(
-            Color.TRANSPARENT,
+            backgroundColor,
             headColor,
             tailColor,
             progressCornerRadius,
             width,
             height,
-            duration
+            duration,
+            padding
         )
     }
 

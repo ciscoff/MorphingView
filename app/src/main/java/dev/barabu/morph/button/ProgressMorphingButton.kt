@@ -12,18 +12,31 @@ abstract class ProgressMorphingButton : MorphingButton, ProgressConsumer {
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
 
+    // Основной цвет прогресса
     protected var primaryColor: Int = Color.TRANSPARENT
+
+    // Дополнительный цвет прогресса (например фон)
     protected var secondaryColor: Int = Color.TRANSPARENT
+
+    // Текущий прогресс в диапазоне от 0 до 100
     protected var progress: Int = ProgressGenerator.MIN_PROGRESS
-    protected val progressStrokeWidth = resources.getDimension(R.dimen.cycle_progress_stroke_width)
+
+    // Толщина кольца прогресса
+    protected val progressStrokeWidth =
+        resources.getDimension(R.dimen.cycle_progress_stroke_width_4dp)
+
+    // Это отступ кольца прогресса от края View, чтобы кольцо было внутри элемента, а не по кромке
+    protected var ringPadding: Float = 0f
 
     protected val paintProgress: Paint = Paint().apply {
         isAntiAlias = true
         style = Paint.Style.FILL
     }
 
+    // Callback по окончании прогресса
     protected var postProgressOp: (() -> Unit)? = null
 
+    // Генератор прогресса
     protected abstract var generator: ProgressGenerator
 
     override fun updateProgress(progress: Int) {
@@ -39,10 +52,12 @@ abstract class ProgressMorphingButton : MorphingButton, ProgressConsumer {
         width: Int,
         height: Int,
         duration: Int,
+        ringPadding: Float = 0f
     ) {
         this.cornerRadius = progressCornerRadius
         this.primaryColor = progressPrimaryColor
         this.secondaryColor = progressSecondaryColor
+        this.ringPadding = ringPadding
 
         blockTouch()
 

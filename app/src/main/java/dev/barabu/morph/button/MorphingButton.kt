@@ -71,6 +71,8 @@ open class MorphingButton : AppCompatButton {
             return
         }
 
+        setPadding(padding.left, padding.top, padding.right, padding.bottom)
+
         drawablePressed.apply {
             color = params.colorPressed
             cornerRadius = params.cornerRadius
@@ -123,7 +125,6 @@ open class MorphingButton : AppCompatButton {
         // Убрать текст и иконку
         text = null
         setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
-        setPadding(padding.left, padding.top, padding.right, padding.bottom)
 
         val animationParams = MorphingAnimation.Params(
             button = this,
@@ -162,13 +163,15 @@ open class MorphingButton : AppCompatButton {
     private fun finalizeMorphing(params: Params) {
         isMorphingInProgress = false
 
+        val iconIdRes = params.icon.resId
+
         when {
-            params.icon != 0 && params.text != null -> {
-                setIconLeft(params.icon)
+            iconIdRes != 0 && params.text != null -> {
+                setIconWithIntrinsicBounds(params.icon)
                 text = params.text
             }
-            params.icon != 0 -> {
-                setIcon(params.icon)
+            iconIdRes != 0 -> {
+                setCenteredIcon(iconIdRes)
             }
             params.text != null -> {
                 text = params.text
@@ -176,11 +179,17 @@ open class MorphingButton : AppCompatButton {
         }
     }
 
-    private fun setIconLeft(@DrawableRes drawableId: Int) {
-        setCompoundDrawablesWithIntrinsicBounds(drawableId, 0, 0, 0)
+    /**
+     * Устанавливает иконку относительно текста кнопки
+     */
+    private fun setIconWithIntrinsicBounds(icon: AnchorIcon) {
+        setCompoundDrawablesWithIntrinsicBounds(icon.l, icon.t, icon.r, icon.b)
     }
 
-    private fun setIcon(@DrawableRes drawableId: Int) {
+    /**
+     * Устанавливает иконку строго по центру кнопки
+     */
+    private fun setCenteredIcon(@DrawableRes drawableId: Int) {
         ContextCompat.getDrawable(context, drawableId)?.let { drawable ->
             post {
                 val padding = width / 2 - drawable.intrinsicWidth / 2
@@ -216,7 +225,7 @@ open class MorphingButton : AppCompatButton {
         val strokeWidth: Int = STROKE_WIDTH_ZERO,
         val duration: Int = 0,
         val text: String? = null,
-        @DrawableRes val icon: Int = 0,
+        val icon: AnchorIcon = AnchorIcon(),
         val animationListener: MorphingAnimation.Listener? = null
     )
 

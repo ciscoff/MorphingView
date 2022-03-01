@@ -1,7 +1,10 @@
 package dev.barabu.morph.impl
 
 import android.content.Context
-import android.graphics.*
+import android.graphics.Canvas
+import android.graphics.Path
+import android.graphics.RectF
+import android.graphics.SweepGradient
 import android.util.AttributeSet
 import dev.barabu.morph.button.AnchorIcon
 import dev.barabu.morph.button.MorphingAnimation
@@ -10,7 +13,7 @@ import dev.barabu.morph.generator.InterruptibleProgressGenerator
 import dev.barabu.morph.generator.ProgressGenerator
 import kotlin.math.min
 
-class CircularGradientProgressButton : ProgressMorphingButton {
+class MtsCircularGradientProgressButton : ProgressMorphingButton {
 
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
@@ -39,7 +42,7 @@ class CircularGradientProgressButton : ProgressMorphingButton {
             progress > ProgressGenerator.MIN_PROGRESS &&
             progress <= ProgressGenerator.MAX_PROGRESS
         ) {
-            val circleSize = min(width, height)
+            val circleSize = min(width, height) - ringPadding * 2
             val horMargin = (width - circleSize) / 2f
             val verMargin = (height - circleSize) / 2f
             val clipWidth = circleSize - progressStrokeWidth * 2
@@ -71,14 +74,16 @@ class CircularGradientProgressButton : ProgressMorphingButton {
 
             canvas?.apply {
                 save()
-                drawColor(Color.TRANSPARENT)
+
                 clipRect(rectProgress)
                 clipPathCompat(canvas, clipPath!!)
+
                 rotate(
                     360f * (progress.toFloat() / ProgressGenerator.MAX_PROGRESS),
                     width / 2f,
                     height / 2f
                 )
+                paintProgress.shader = sweepGradient
                 drawArc(
                     horMargin,
                     verMargin,

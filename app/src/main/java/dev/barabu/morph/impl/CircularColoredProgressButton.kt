@@ -3,6 +3,7 @@ package dev.barabu.morph.impl
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
+import dev.barabu.morph.button.AnchorIcon
 import dev.barabu.morph.button.MorphingAnimation
 import dev.barabu.morph.button.ProgressMorphingButton
 import dev.barabu.morph.generator.InterruptibleProgressGenerator
@@ -122,7 +123,7 @@ class CircularColoredProgressButton : ProgressMorphingButton {
                 colorNormal = colorNormal,
                 colorPressed = colorPressed,
                 duration = duration,
-                icon = iconId,
+                icon = AnchorIcon(l = iconId),
                 animationListener = object : MorphingAnimation.Listener {
                     override fun onAnimationStart() {
                     }
