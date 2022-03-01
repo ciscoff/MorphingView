@@ -2,7 +2,7 @@ package dev.barabu.morph.generator
 
 import android.os.Handler
 import android.os.Looper
-import dev.barabu.morph.button.ProgressButton
+import dev.barabu.morph.button.ProgressConsumer
 import dev.barabu.morph.generator.ProgressGenerator.Companion.MAX_PROGRESS
 import dev.barabu.morph.generator.ProgressGenerator.Companion.MIN_PROGRESS
 import kotlin.random.Random
@@ -14,13 +14,14 @@ class IndeterminateProgressGenerator(
     private var progress = MIN_PROGRESS
     private val handler = Handler(Looper.getMainLooper())
 
-    override fun start(consumer: ProgressButton, delay: Long) {
+    override fun start(consumer: ProgressConsumer, delay: Long) {
 
         handler.postDelayed(object : Runnable {
             override fun run() {
                 progress += PROGRESS_STEP
 
                 if (progress > MAX_PROGRESS) {
+                    progress = MIN_PROGRESS
                     listener.onComplete()
                 } else {
                     consumer.updateProgress(progress)
@@ -30,7 +31,7 @@ class IndeterminateProgressGenerator(
         }, delay)
     }
 
-    override fun start(consumer: ProgressButton) {
+    override fun start(consumer: ProgressConsumer) {
         start(consumer, MIN_DELAY)
     }
 

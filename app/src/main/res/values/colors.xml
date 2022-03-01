@@ -11,4 +11,17 @@
     <color name="cycle_progress_foreground">#388e3c</color>
     <color name="cycle_progress_background">#d7ffd9</color>
     <color name="cycle_progress_clipping">#ffffff</color>
+
+    <color name="ds_mts_red">#e30611</color>
+    <color name="ds_mts_pink">#ffcccc</color>
+
+    <color name="gray_A100">#F7EEEE</color>
+    <color name="gray_A150">#DBD4D4</color>
+    <color name="gray_A200">#B9B5B5</color>
+    <color name="gray_A700">#A5A1A1</color>
+    <color name="gray_A400">#8A8383</color>
+
+    <color name="playback_control">#88e30611</color>
+    <color name="playback_failure">#cce30611</color>
+    <color name="buffered_color">#ffcce6</color>
 </resources>

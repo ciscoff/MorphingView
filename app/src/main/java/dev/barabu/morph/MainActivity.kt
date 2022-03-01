@@ -1,17 +1,24 @@
 package dev.barabu.morph
 
+import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import androidx.core.content.ContextCompat
+import dev.barabu.morph.button.AnchorIcon
 import dev.barabu.morph.button.MorphingButton
-import dev.barabu.morph.button.ProgressButton
+import dev.barabu.morph.button.OpResult
+import dev.barabu.morph.button.ProgressMorphingButton
 import dev.barabu.morph.databinding.ActivityMainBinding
+import dev.barabu.morph.impl.CircularGradientProgressButton
 
 class MainActivity : BaseActivity() {
 
     private var isRectButtonInTextMode = true
     private var isLinearProgressButtonInTextMode = true
     private var isCycleProgressButtonInTextMode = true
-    private var isGradientCycleProgressButtonInTextMode = true
+    private var isMultiStateButtonInTextMode = true
+    private var isMtsButtonInTextMode = true
 
     private val viewBinding by lazy(LazyThreadSafetyMode.NONE) {
         ActivityMainBinding.inflate(layoutInflater)
@@ -25,56 +32,165 @@ class MainActivity : BaseActivity() {
             setOnClickListener {
 
                 if (isRectButtonInTextMode) {
-                    morphToSuccess(this)
+                    morphToSuccess()
                 } else {
-                    morphToRect(this, this@MainActivity.integer(R.integer.animation_duration))
+                    morphToRect(this@MainActivity.integer(R.integer.animation_duration))
                 }
                 isRectButtonInTextMode = !isRectButtonInTextMode
             }
-            morphToRect(this, 0)
+            morphToRect(0)
         }
 
-        viewBinding.buttonProgressLinear.apply {
+        viewBinding.buttonLinearProgress.apply {
             setOnClickListener {
                 if (isLinearProgressButtonInTextMode) {
-                    morphToLinearProgress(this)
+                    startLinearProgress()
                 } else {
-                    morphToRect(this, this@MainActivity.integer(R.integer.animation_duration))
+                    morphToRect(this@MainActivity.integer(R.integer.animation_duration))
                 }
                 isLinearProgressButtonInTextMode = !isLinearProgressButtonInTextMode
             }
-            morphToRect(this, 0)
+            morphToRect(0)
         }
 
-        viewBinding.buttonProgressCycle.apply {
+        viewBinding.buttonCircularColoredProgress.apply {
             setOnClickListener {
 
                 if (isCycleProgressButtonInTextMode) {
-                    morphToCycleProgress(this)
+                    startCircularProgress(
+                        ContextCompat.getColor(
+                            this@MainActivity,
+                            R.color.cycle_progress_foreground
+                        ),
+                        ContextCompat.getColor(
+                            this@MainActivity,
+                            R.color.cycle_progress_background
+                        ),
+                        Color.TRANSPARENT,
+                        0f
+                    )
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        stopCircularProgress(
+                            OpResult.Failure,
+                            ContextCompat.getColor(
+                                this@MainActivity,
+                                android.R.color.holo_green_light
+                            ),
+                            ContextCompat.getColor(
+                                this@MainActivity,
+                                android.R.color.holo_green_dark
+                            ),
+                            ContextCompat.getColor(
+                                this@MainActivity,
+                                android.R.color.holo_red_light
+                            ),
+                            ContextCompat.getColor(
+                                this@MainActivity,
+                                android.R.color.holo_red_dark
+                            )
+                        )
+                    }, 2000)
                 } else {
-                    morphToRect(this, this@MainActivity.integer(R.integer.animation_duration))
+                    morphToRect(this@MainActivity.integer(R.integer.animation_duration))
                 }
                 isCycleProgressButtonInTextMode = !isCycleProgressButtonInTextMode
             }
-            morphToRect(this, 0)
+            morphToRect(0)
         }
 
-        viewBinding.buttonProgressCycleGradient.apply {
+        viewBinding.buttonCircularGradientProgress.apply {
             setOnClickListener {
-
-                if (isGradientCycleProgressButtonInTextMode) {
-                    morphToCycleProgress(this)
+                if (isMultiStateButtonInTextMode) {
+                    startCircularProgress(
+                        ContextCompat.getColor(
+                            this@MainActivity,
+                            R.color.cycle_progress_background
+                        ),
+                        ContextCompat.getColor(
+                            this@MainActivity,
+                            R.color.cycle_progress_foreground
+                        ),
+                        Color.TRANSPARENT,
+                        0f
+                    )
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        stopCircularProgress(
+                            OpResult.Success,
+                            ContextCompat.getColor(
+                                this@MainActivity,
+                                android.R.color.holo_green_light
+                            ),
+                            ContextCompat.getColor(
+                                this@MainActivity,
+                                android.R.color.holo_green_dark
+                            ),
+                            ContextCompat.getColor(
+                                this@MainActivity,
+                                android.R.color.holo_red_light
+                            ),
+                            ContextCompat.getColor(
+                                this@MainActivity,
+                                android.R.color.holo_red_dark
+                            )
+                        )
+                    }, 2000)
                 } else {
-                    morphToRect(this, this@MainActivity.integer(R.integer.animation_duration))
+                    morphToRect(this@MainActivity.integer(R.integer.animation_duration))
                 }
-                isGradientCycleProgressButtonInTextMode = !isGradientCycleProgressButtonInTextMode
+                isMultiStateButtonInTextMode = !isMultiStateButtonInTextMode
             }
-            morphToRect(this, 0)
+            morphToRect(0)
+        }
 
+        viewBinding.buttonMts.apply {
+
+            setOnClickListener {
+                if (isMtsButtonInTextMode) {
+                    startCircularProgress(
+                        ContextCompat.getColor(
+                            this@MainActivity,
+                            R.color.ds_mts_pink
+                        ),
+                        Color.WHITE,
+                        ContextCompat.getColor(
+                            this@MainActivity,
+                            R.color.ds_mts_red
+                        ),
+                        dimen(R.dimen.cycle_progress_padding_2dp)
+                    )
+
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        stopCircularProgress(
+                            OpResult.Success,
+                            ContextCompat.getColor(
+                                this@MainActivity,
+                                android.R.color.holo_blue_light
+                            ),
+                            ContextCompat.getColor(
+                                this@MainActivity,
+                                android.R.color.holo_blue_dark
+                            ),
+                            ContextCompat.getColor(
+                                this@MainActivity,
+                                android.R.color.holo_red_light
+                            ),
+                            ContextCompat.getColor(
+                                this@MainActivity,
+                                android.R.color.holo_red_dark
+                            )
+                        )
+                    }, 2000)
+
+                } else {
+                    morphToMtsRect(this@MainActivity.integer(R.integer.animation_duration))
+                }
+                isMtsButtonInTextMode = !isMtsButtonInTextMode
+            }
+            morphToMtsRect(0)
         }
     }
 
-    private fun morphToRect(button: MorphingButton, duration: Int) {
+    private fun MorphingButton.morphToRect(duration: Int) {
         val params = MorphingButton.Params(
             cornerRadius = dimen(R.dimen.corner_radius_2dp),
             width = dimen(R.dimen.button_rectangle_width).toInt(),
@@ -84,10 +200,24 @@ class MainActivity : BaseActivity() {
             duration = duration,
             text = getString(R.string.text_button)
         )
-        button.morph(params)
+        morph(params)
     }
 
-    private fun morphToSuccess(button: MorphingButton) {
+    private fun MorphingButton.morphToMtsRect(duration: Int) {
+        val params = MorphingButton.Params(
+            cornerRadius = dimen(R.dimen.corner_radius_56dp),
+            width = dimen(R.dimen.button_rectangle_width).toInt(),
+            height = dimen(R.dimen.button_rectangle_height).toInt(),
+            colorNormal = color(R.color.ds_mts_red),
+            colorPressed = color(android.R.color.holo_red_dark),
+            duration = duration,
+            text = getString(R.string.text_button),
+            icon = AnchorIcon(0, 0, R.drawable.ic_send, 0)
+        )
+        morph(params)
+    }
+
+    private fun MorphingButton.morphToSuccess() {
         val params = MorphingButton.Params(
             cornerRadius = dimen(R.dimen.corner_radius_56dp),
             width = dimen(R.dimen.button_square).toInt(),
@@ -95,26 +225,26 @@ class MainActivity : BaseActivity() {
             colorNormal = color(android.R.color.holo_green_light),
             colorPressed = color(android.R.color.holo_green_dark),
             duration = integer(R.integer.animation_duration),
-            icon = R.drawable.ic_done
+            icon = AnchorIcon(l = R.drawable.ic_done)
         )
-        button.morph(params)
+        morph(params)
     }
 
-    private fun morphToLinearProgress(button: ProgressButton) {
+    private fun ProgressMorphingButton.startLinearProgress() {
         val color =
-            ContextCompat.getColor(this, R.color.cycle_progress_clipping)
+            ContextCompat.getColor(this@MainActivity, R.color.cycle_progress_clipping)
+        val progressForegroundColor =
+            ContextCompat.getColor(this@MainActivity, R.color.cycle_progress_foreground)
         val progressBackgroundColor =
-            ContextCompat.getColor(this, R.color.cycle_progress_background)
-        val progressColor =
-            ContextCompat.getColor(this, R.color.cycle_progress_foreground)
+            ContextCompat.getColor(this@MainActivity, R.color.cycle_progress_background)
         val progressCornerRadius = dimen(R.dimen.corner_radius_4dp)
         val width = dimen(R.dimen.button_rectangle_width).toInt()
         val height = dimen(R.dimen.button_progress_height).toInt()
         val duration = integer(R.integer.animation_duration)
 
-        button.morphToProgress(
+        morphToProgress(
             color,
-            progressColor,
+            progressForegroundColor,
             progressBackgroundColor,
             progressCornerRadius,
             width,
@@ -123,49 +253,73 @@ class MainActivity : BaseActivity() {
         )
     }
 
-    private fun morphToCycleProgress(button: ProgressButton) {
-        val color =
-            ContextCompat.getColor(this, R.color.cycle_progress_clipping)
-        val progressBackgroundColor =
-            ContextCompat.getColor(this, R.color.cycle_progress_background)
-        val progressColor =
-            ContextCompat.getColor(this, R.color.cycle_progress_foreground)
+    /**
+     * Если используется градиентный прогресс (gradient sweep), то цвет меняется по кругу CW
+     * от градуса 0 (startColor) до градуса 360 (endColor). Канву мы также вращаем CW, то есть
+     * получается, что цвет движется CW и endColor движется в "голове". "Голова" вращения должна
+     * быть более темного цвета, чем "хвост". Здесь primaryColor - это цвет "головы", а
+     * secondaryColor - цвет "хвоста".
+     */
+    private fun ProgressMorphingButton.startCircularProgress(
+        primaryColor: Int,
+        secondaryColor: Int,
+        backgroundColor: Int,
+        padding: Float
+    ) {
         val progressCornerRadius = dimen(R.dimen.corner_radius_56dp)
         val width = dimen(R.dimen.button_rectangle_height).toInt()
         val height = dimen(R.dimen.button_rectangle_height).toInt()
         val duration = integer(R.integer.animation_duration)
 
-        button.morphToProgress(
-            color,
-            progressColor,
-            progressBackgroundColor,
+        // Это коррекция для градиентного прогресса
+        val (headColor, tailColor) = if (this is CircularGradientProgressButton) {
+            secondaryColor to primaryColor
+        } else {
+            primaryColor to secondaryColor
+        }
+
+        morphToProgress(
+            backgroundColor,
+            headColor,
+            tailColor,
             progressCornerRadius,
             width,
             height,
-            duration
+            duration,
+            padding
         )
     }
 
-    private fun morphToGradientCycleProgress(button: ProgressButton) {
-        val color =
-            ContextCompat.getColor(this, R.color.cycle_progress_clipping)
-        val progressBackgroundColor =
-            ContextCompat.getColor(this, R.color.cycle_progress_background)
-        val progressColor =
-            ContextCompat.getColor(this, R.color.cycle_progress_foreground)
-        val progressCornerRadius = dimen(R.dimen.corner_radius_56dp)
-        val width = dimen(R.dimen.button_rectangle_height).toInt()
-        val height = dimen(R.dimen.button_rectangle_height).toInt()
-        val duration = integer(R.integer.animation_duration)
-
-        button.morphToProgress(
-            color,
-            progressColor,
-            progressBackgroundColor,
-            progressCornerRadius,
-            width,
-            height,
-            duration
-        )
+    private fun ProgressMorphingButton.stopCircularProgress(
+        result: OpResult,
+        successColorNormal: Int,
+        successColorPressed: Int,
+        failureColorNormal: Int,
+        failureColorPressed: Int,
+    ) {
+        when (result) {
+            OpResult.Success -> {
+                morphToFinish(
+                    successColorNormal,
+                    successColorPressed,
+                    dimen(R.dimen.corner_radius_56dp),
+                    dimen(R.dimen.button_square).toInt(),
+                    dimen(R.dimen.button_square).toInt(),
+                    300,
+                    R.drawable.ic_done
+                )
+            }
+            OpResult.Failure -> {
+                morphToFinish(
+                    failureColorNormal,
+                    failureColorPressed,
+                    dimen(R.dimen.corner_radius_56dp),
+                    dimen(R.dimen.button_square).toInt(),
+                    dimen(R.dimen.button_square).toInt(),
+                    300,
+                    R.drawable.ic_error
+                )
+            }
+        }
     }
 }
