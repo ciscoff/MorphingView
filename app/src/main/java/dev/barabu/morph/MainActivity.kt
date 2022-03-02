@@ -19,6 +19,7 @@ class MainActivity : BaseActivity() {
     private var isCycleProgressButtonInTextMode = true
     private var isMultiStateButtonInTextMode = true
     private var isMtsButtonInTextMode = true
+    private var isDottedButtonInTextMode = true
 
     private val viewBinding by lazy(LazyThreadSafetyMode.NONE) {
         ActivityMainBinding.inflate(layoutInflater)
@@ -188,6 +189,52 @@ class MainActivity : BaseActivity() {
             }
             morphToMtsRect(0)
         }
+
+        viewBinding.buttonDotted.apply {
+            setOnClickListener {
+                if(isDottedButtonInTextMode) {
+                    startCircularProgress(
+                        ContextCompat.getColor(
+                            this@MainActivity,
+                            R.color.ds_mts_pink
+                        ),
+                        Color.WHITE,
+                        ContextCompat.getColor(
+                            this@MainActivity,
+                            R.color.ds_mts_red
+                        ),
+                        dimen(R.dimen.cycle_progress_padding_4dp)
+                    )
+
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        stopCircularProgress(
+                            OpResult.Success,
+                            ContextCompat.getColor(
+                                this@MainActivity,
+                                android.R.color.holo_blue_light
+                            ),
+                            ContextCompat.getColor(
+                                this@MainActivity,
+                                android.R.color.holo_blue_dark
+                            ),
+                            ContextCompat.getColor(
+                                this@MainActivity,
+                                android.R.color.holo_red_light
+                            ),
+                            ContextCompat.getColor(
+                                this@MainActivity,
+                                android.R.color.holo_red_dark
+                            )
+                        )
+                    }, 2000)
+                } else {
+                    morphToMtsRect(this@MainActivity.integer(R.integer.animation_duration))
+                }
+
+                isDottedButtonInTextMode = !isDottedButtonInTextMode
+            }
+            morphToMtsRect(0)
+        }
     }
 
     private fun MorphingButton.morphToRect(duration: Int) {
@@ -257,7 +304,7 @@ class MainActivity : BaseActivity() {
      * Если используется градиентный прогресс (gradient sweep), то цвет меняется по кругу CW
      * от градуса 0 (startColor) до градуса 360 (endColor). Канву мы также вращаем CW, то есть
      * получается, что цвет движется CW и endColor движется в "голове". "Голова" вращения должна
-     * быть более темного цвета, чем "хвост". Здесь primaryColor - это цвет "головы", а
+     * быть более выраженного цвета, чем "хвост". Здесь primaryColor - это цвет "головы", а
      * secondaryColor - цвет "хвоста".
      */
     private fun ProgressMorphingButton.startCircularProgress(
