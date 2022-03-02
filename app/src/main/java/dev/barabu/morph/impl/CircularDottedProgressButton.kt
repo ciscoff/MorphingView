@@ -18,15 +18,30 @@ class CircularDottedProgressButton : ProgressMorphingButton, Gradient {
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
 
     private lateinit var sweepGradient: SweepGradient
-    private lateinit var pathProgress: Path
-    private lateinit var pathStamp: Path
 
+    /**
+     * Контур прогресса - окружность
+     */
+    private lateinit var pathProgress: Path
+
+    /**
+     * Отдельная точка в колесе прогресса
+     */
+    private lateinit var pathDot: Path
+
+    /**
+     * Расчитать размеры точки в колесе прогресса. Размер точек и промежутков между ними одинаковы.
+     * Поэтому длину окружности делим на удвоенное количество точек.
+     */
     private val dotSize: Float
         get() {
             val circleDiameter = min(width, height) - ringPadding * 2
             return (circleDiameter * PI.toFloat()) / (DOTS_QTY * 2)
         }
 
+    /**
+     * Paint для заливки точек прогресса. Она будет красить градиентом.
+     */
     override val paintProgress: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL_AND_STROKE
     }
@@ -53,18 +68,21 @@ class CircularDottedProgressButton : ProgressMorphingButton, Gradient {
             val circleSize = min(width, height) - ringPadding * 2
 
             if (!::pathProgress.isInitialized) {
+                // контур прогресса - кольцо
                 pathProgress = Path().apply {
                     addCircle(width / 2f, height / 2f, circleSize / 2f, Path.Direction.CW)
                 }
 
-                pathStamp = Path().apply {
+                // отдельная точка
+                pathDot = Path().apply {
                     addOval(RectF(0f, 0f, dotSize, dotSize), Path.Direction.CW)
                 }
 
+                // эффект рисования Path'a другим Path'ом
                 paintProgress.apply {
                     pathEffect =
                         PathDashPathEffect(
-                            pathStamp,
+                            pathDot,
                             dotSize * 2,
                             0f,
                             PathDashPathEffect.Style.ROTATE
@@ -151,7 +169,9 @@ class CircularDottedProgressButton : ProgressMorphingButton, Gradient {
     }
 
     companion object {
-        private const val DOT_SIZE = 10f
+        /**
+         * Количество точек в колесе прогресса
+         */
         private const val DOTS_QTY = 12
     }
 }
