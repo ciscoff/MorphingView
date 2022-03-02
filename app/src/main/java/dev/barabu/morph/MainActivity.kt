@@ -5,12 +5,8 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.core.content.ContextCompat
-import dev.barabu.morph.button.AnchorIcon
-import dev.barabu.morph.button.MorphingButton
-import dev.barabu.morph.button.OpResult
-import dev.barabu.morph.button.ProgressMorphingButton
+import dev.barabu.morph.button.*
 import dev.barabu.morph.databinding.ActivityMainBinding
-import dev.barabu.morph.impl.CircularGradientProgressButton
 
 class MainActivity : BaseActivity() {
 
@@ -192,18 +188,18 @@ class MainActivity : BaseActivity() {
 
         viewBinding.buttonDotted.apply {
             setOnClickListener {
-                if(isDottedButtonInTextMode) {
+                if (isDottedButtonInTextMode) {
                     startCircularProgress(
-                        ContextCompat.getColor(
-                            this@MainActivity,
-                            R.color.ds_mts_pink
-                        ),
-                        Color.WHITE,
-                        ContextCompat.getColor(
+                        primaryColor = Color.WHITE,
+                        secondaryColor = ContextCompat.getColor(
                             this@MainActivity,
                             R.color.ds_mts_red
                         ),
-                        dimen(R.dimen.cycle_progress_padding_4dp)
+                        backgroundColor = ContextCompat.getColor(
+                            this@MainActivity,
+                            R.color.ds_mts_red
+                        ),
+                        padding = dimen(R.dimen.cycle_progress_padding_4dp)
                     )
 
                     Handler(Looper.getMainLooper()).postDelayed({
@@ -226,7 +222,7 @@ class MainActivity : BaseActivity() {
                                 android.R.color.holo_red_dark
                             )
                         )
-                    }, 2000)
+                    }, 12000)
                 } else {
                     morphToMtsRect(this@MainActivity.integer(R.integer.animation_duration))
                 }
@@ -319,7 +315,7 @@ class MainActivity : BaseActivity() {
         val duration = integer(R.integer.animation_duration)
 
         // Это коррекция для градиентного прогресса
-        val (headColor, tailColor) = if (this is CircularGradientProgressButton) {
+        val (headColor, tailColor) = if (this is Gradient) {
             secondaryColor to primaryColor
         } else {
             primaryColor to secondaryColor
