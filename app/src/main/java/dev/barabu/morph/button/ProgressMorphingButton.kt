@@ -28,7 +28,7 @@ abstract class ProgressMorphingButton : MorphingButton, ProgressConsumer {
     // Это отступ кольца прогресса от края View, чтобы кольцо было внутри элемента, а не по кромке
     protected var ringPadding: Float = 0f
 
-    protected val paintProgress: Paint = Paint().apply {
+    protected open val paintProgress: Paint = Paint().apply {
         isAntiAlias = true
         style = Paint.Style.FILL
     }
@@ -81,7 +81,7 @@ abstract class ProgressMorphingButton : MorphingButton, ProgressConsumer {
         morph(params)
     }
 
-    abstract fun morphToFinish(
+    abstract fun morphToResult(
         colorNormal: Int,
         colorPressed: Int,
         cornerRadius: Float,

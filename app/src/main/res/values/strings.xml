@@ -1,4 +1,12 @@
 <resources>
     <string name="app_name">MorphingView</string>
     <string name="text_button">button</string>
+
+    <string name="button_text_simple">morph</string>
+    <string name="button_text_line">line</string>
+    <string name="button_text_circle_color">ring</string>
+    <string name="button_text_circle_gradient_edge">gradient edge</string>
+    <string name="button_text_circle_gradient_inside">gradient inside</string>
+    <string name="button_text_circle_dots_gradient">gradient dots</string>
+
 </resources>

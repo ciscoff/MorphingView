@@ -1,7 +1,10 @@
 package dev.barabu.morph.impl
 
 import android.content.Context
-import android.graphics.*
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Path
+import android.graphics.RectF
 import android.util.AttributeSet
 import dev.barabu.morph.button.AnchorIcon
 import dev.barabu.morph.button.MorphingAnimation
@@ -104,7 +107,7 @@ class CircularColoredProgressButton : ProgressMorphingButton {
         }
     }
 
-    override fun morphToFinish(
+    override fun morphToResult(
         colorNormal: Int,
         colorPressed: Int,
         cornerRadius: Float,

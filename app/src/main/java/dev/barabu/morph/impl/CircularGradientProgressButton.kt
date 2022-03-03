@@ -4,13 +4,14 @@ import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
 import dev.barabu.morph.button.AnchorIcon
+import dev.barabu.morph.button.Gradient
 import dev.barabu.morph.button.MorphingAnimation
 import dev.barabu.morph.button.ProgressMorphingButton
 import dev.barabu.morph.generator.InterruptibleProgressGenerator
 import dev.barabu.morph.generator.ProgressGenerator
 import kotlin.math.min
 
-class CircularGradientProgressButton : ProgressMorphingButton {
+class CircularGradientProgressButton : ProgressMorphingButton, Gradient {
 
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
@@ -120,7 +121,7 @@ class CircularGradientProgressButton : ProgressMorphingButton {
         )
     }
 
-    override fun morphToFinish(
+    override fun morphToResult(
         colorNormal: Int,
         colorPressed: Int,
         cornerRadius: Float,
