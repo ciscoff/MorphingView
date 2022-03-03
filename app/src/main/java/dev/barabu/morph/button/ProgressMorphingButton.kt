@@ -81,7 +81,7 @@ abstract class ProgressMorphingButton : MorphingButton, ProgressConsumer {
         morph(params)
     }
 
-    abstract fun morphToFinish(
+    abstract fun morphToResult(
         colorNormal: Int,
         colorPressed: Int,
         cornerRadius: Float,

@@ -130,7 +130,7 @@ class CircularDottedProgressButton : ProgressMorphingButton, Gradient {
         )
     }
 
-    override fun morphToFinish(
+    override fun morphToResult(
         colorNormal: Int,
         colorPressed: Int,
         cornerRadius: Float,

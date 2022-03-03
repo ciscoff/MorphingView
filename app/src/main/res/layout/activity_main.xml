@@ -16,15 +16,22 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <dev.barabu.morph.impl.LinearProgressButton
-        android:id="@+id/button_linear_progress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <FrameLayout
+        android:id="@+id/button_linear_progress_container"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/button_square"
         android:layout_marginTop="@dimen/margin_20dp"
-        android:textColor="@android:color/white"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/button_text" />
+        app:layout_constraintTop_toBottomOf="@id/button_text">
+
+        <dev.barabu.morph.impl.LinearProgressButton
+            android:id="@+id/button_linear_progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textColor="@android:color/white" />
+    </FrameLayout>
 
     <dev.barabu.morph.impl.CircularColoredProgressButton
         android:id="@+id/button_circular_colored_progress"
@@ -34,7 +41,7 @@
         android:textColor="@android:color/white"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/button_linear_progress" />
+        app:layout_constraintTop_toBottomOf="@id/button_linear_progress_container" />
 
 
     <dev.barabu.morph.impl.CircularGradientProgressButton
