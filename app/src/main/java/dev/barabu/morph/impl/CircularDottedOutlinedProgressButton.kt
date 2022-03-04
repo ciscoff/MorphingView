@@ -104,6 +104,10 @@ class CircularDottedOutlinedProgressButton : ProgressMorphingButton, Gradient {
         }
     }
 
+    override fun morphToResult(params: Params) {
+        TODO("Not yet implemented")
+    }
+
     override fun morphToProgress(
         color: Int,
         progressPrimaryColor: Int,
@@ -154,6 +158,7 @@ class CircularDottedOutlinedProgressButton : ProgressMorphingButton, Gradient {
                 height = height,
                 colorNormal = colorNormal,
                 colorPressed = colorPressed,
+                colorText = Color.WHITE,
                 duration = duration,
                 icon = AnchorIcon(l = iconId),
                 strokeColor = strokeColor,

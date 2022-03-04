@@ -7,10 +7,21 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="brown_normal">#795548</color>
+    <color name="brown_dark">#5D4037</color>
+    <color name="navy">#303F9F</color>
+
+    <color name="default_color_stroke">@android:color/transparent</color>
+    <color name="default_color_normal">@android:color/holo_blue_light</color>
+    <color name="default_color_pressed">@android:color/holo_blue_dark</color>
 
     <color name="cycle_progress_foreground">#388e3c</color>
     <color name="cycle_progress_background">#d7ffd9</color>
     <color name="cycle_progress_clipping">#ffffff</color>
+
+    <color name="linear_progress_background">@android:color/white</color>
+    <color name="linear_progress_primary">#388e3c</color>
+    <color name="linear_progress_secondary">#d7ffd9</color>
 
     <color name="ds_mts_red">#e30611</color>
     <color name="ds_mts_pink">#ffcccc</color>

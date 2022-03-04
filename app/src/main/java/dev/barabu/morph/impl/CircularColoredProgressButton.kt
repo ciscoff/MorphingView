@@ -74,9 +74,7 @@ class CircularColoredProgressButton : ProgressMorphingButton {
             }
 
             canvas?.apply {
-
                 save()
-                drawColor(Color.TRANSPARENT)
 
                 // Clipping в центре в форме круга
                 clipRect(rectProgress)
@@ -89,11 +87,11 @@ class CircularColoredProgressButton : ProgressMorphingButton {
                     right = verMargin + circleSize
                 }
 
-                // Фон для прогресса (круг)
+                // Фон для прогресса (кольцо)
                 paintProgress.color = secondaryColor
                 drawOval(rectProgress, paintProgress)
 
-                // Индикатор прогресса поверх фона (Arc)
+                // Индикатор прогресса поверх фона (дуга)
                 paintProgress.color = primaryColor
                 drawArc(
                     rectProgress,
@@ -107,6 +105,23 @@ class CircularColoredProgressButton : ProgressMorphingButton {
         }
     }
 
+    override fun morphToResult(params: Params) {
+
+        params.apply {
+            animationListener = object : MorphingAnimation.Listener {
+                override fun onAnimationStart() {
+                }
+
+                override fun onAnimationEnd() {
+                    unBlockTouch()
+                }
+            }
+        }
+
+        postProgressOp = { morph(params) }
+        (generator as InterruptibleProgressGenerator).interrupt()
+    }
+
     override fun morphToResult(
         colorNormal: Int,
         colorPressed: Int,
@@ -118,6 +133,7 @@ class CircularColoredProgressButton : ProgressMorphingButton {
         strokeColor: Int,
         strokeWidth: Int
     ) {
+
         (generator as InterruptibleProgressGenerator).interrupt()
 
         postProgressOp = {
@@ -127,6 +143,7 @@ class CircularColoredProgressButton : ProgressMorphingButton {
                 height = height,
                 colorNormal = colorNormal,
                 colorPressed = colorPressed,
+                colorText = Color.WHITE,
                 duration = duration,
                 icon = AnchorIcon(l = iconId),
                 strokeColor = strokeColor,

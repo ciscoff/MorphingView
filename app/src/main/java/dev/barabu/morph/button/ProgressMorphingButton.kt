@@ -44,6 +44,26 @@ abstract class ProgressMorphingButton : MorphingButton, ProgressConsumer {
         invalidate()
     }
 
+    open fun morphToProgress(progressParams: ProgressParams) {
+
+        this.primaryColor = progressParams.colorPrimary
+        this.secondaryColor = progressParams.colorSecondary
+        this.ringPadding = progressParams.ringPadding
+
+        val params = progressParams.toParams().apply {
+            animationListener = object : MorphingAnimation.Listener {
+                override fun onAnimationStart() {
+                }
+
+                // Сразу после морфа формы кнопки запускаем анимацию прогресса
+                override fun onAnimationEnd() {
+                    generator.start(this@ProgressMorphingButton)
+                }
+            }
+        }
+        morph(params)
+    }
+
     /**
      * Любой morph - это смена пары цветов colorNormal/colorPressed
      */
@@ -73,6 +93,7 @@ abstract class ProgressMorphingButton : MorphingButton, ProgressConsumer {
             height = height,
             colorNormal = color,
             colorPressed = color,
+            colorText = Color.WHITE,
             duration = duration,
             strokeColor = strokeColor,
             strokeWidth = strokeWidth,
@@ -92,6 +113,9 @@ abstract class ProgressMorphingButton : MorphingButton, ProgressConsumer {
     /**
      * Любой morph - это смена пары цветов colorNormal/colorPressed
      */
+
+    abstract fun morphToResult(params: Params)
+
     abstract fun morphToResult(
         colorNormal: Int,
         colorPressed: Int,

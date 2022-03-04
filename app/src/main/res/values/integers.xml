@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <integer name="default_stroke_width">0</integer>
+    <integer name="morph_duration_default">300</integer>
+    <integer name="morph_duration_0">0</integer>
     <integer name="animation_duration">300</integer>
 </resources>

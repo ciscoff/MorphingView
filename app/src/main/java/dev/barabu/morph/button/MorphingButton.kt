@@ -7,11 +7,14 @@ import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.StateListDrawable
 import android.util.AttributeSet
 import android.util.StateSet
+import androidx.annotation.ColorInt
+import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.content.ContextCompat
 import dev.barabu.morph.GradientDrawableDelegate
 import dev.barabu.morph.R
+import dev.barabu.morph.extentions.color
 
 /**
  * БЛЯ !!!!
@@ -48,8 +51,9 @@ open class MorphingButton : AppCompatButton {
     protected var cornerRadius = resources.getDimension(R.dimen.corner_radius_2dp)
     protected var isMorphingInProgress: Boolean = false
 
-    private var colorNormal = ContextCompat.getColor(context, android.R.color.holo_blue_light)
-    private var colorPressed = ContextCompat.getColor(context, android.R.color.holo_blue_dark)
+    private var colorNormal = context.color(android.R.color.holo_blue_light)
+    private var colorPressed = context.color(android.R.color.holo_blue_dark)
+    private var colorText = context.color(android.R.color.white)
     private var strokeColor = Color.TRANSPARENT
     private var strokeWidth = STROKE_WIDTH_ZERO
 
@@ -167,6 +171,8 @@ open class MorphingButton : AppCompatButton {
     private fun finalizeMorphing(params: Params) {
         isMorphingInProgress = false
 
+        setTextColor(params.colorText)
+
         val iconIdRes = params.icon.resId
 
         when {
@@ -223,15 +229,43 @@ open class MorphingButton : AppCompatButton {
         val cornerRadius: Float,
         val width: Int,
         val height: Int,
-        val colorNormal: Int,
-        val colorPressed: Int,
-        val strokeColor: Int = Color.TRANSPARENT,
+        @ColorInt val colorNormal: Int,
+        @ColorInt val colorPressed: Int,
+        @ColorInt val colorText: Int,
+        @ColorInt val strokeColor: Int = Color.TRANSPARENT,
         val strokeWidth: Int = STROKE_WIDTH_ZERO,
         val duration: Int = 0,
         val text: String? = null,
         val icon: AnchorIcon = AnchorIcon(),
-        val animationListener: MorphingAnimation.Listener? = null
+        var animationListener: MorphingAnimation.Listener? = null
     )
+
+    data class ProgressParams(
+        val cornerRadius: Float,
+        val width: Int,
+        val height: Int,
+        @ColorInt val colorPrimary: Int,
+        @ColorInt val colorSecondary: Int,
+        @ColorInt val colorBackground: Int,
+        @ColorInt val strokeColor: Int = Color.TRANSPARENT,
+        val strokeWidth: Int = STROKE_WIDTH_ZERO,
+        val duration: Int = 0,
+        val ringPadding: Float = 0f,
+        var animationListener: MorphingAnimation.Listener? = null
+    ) {
+        fun toParams() : Params = Params(
+            cornerRadius = cornerRadius,
+            width = width,
+            height = height,
+            colorNormal = colorBackground,
+            colorPressed = colorBackground,
+            colorText = Color.TRANSPARENT,
+            strokeColor = strokeColor,
+            strokeWidth = strokeWidth,
+            duration = duration,
+            animationListener = animationListener
+        )
+    }
 
     companion object {
         private const val STROKE_WIDTH_ZERO = 0

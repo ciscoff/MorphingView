@@ -1,10 +1,7 @@
 package dev.barabu.morph.impl
 
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Path
-import android.graphics.RectF
-import android.graphics.SweepGradient
+import android.graphics.*
 import android.util.AttributeSet
 import dev.barabu.morph.button.AnchorIcon
 import dev.barabu.morph.button.MorphingAnimation
@@ -128,6 +125,10 @@ class CircularMtsGradientProgressButton : ProgressMorphingButton {
         )
     }
 
+    override fun morphToResult(params: Params) {
+        TODO("Not yet implemented")
+    }
+
     override fun morphToResult(
         colorNormal: Int,
         colorPressed: Int,
@@ -148,6 +149,7 @@ class CircularMtsGradientProgressButton : ProgressMorphingButton {
                 height = height,
                 colorNormal = colorNormal,
                 colorPressed = colorPressed,
+                colorText = Color.WHITE,
                 duration = duration,
                 icon = AnchorIcon(l = iconId),
                 strokeColor = strokeColor,

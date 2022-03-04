@@ -4,7 +4,9 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.RectF
 import android.util.AttributeSet
-import dev.barabu.morph.button.*
+import android.util.Log
+import dev.barabu.morph.button.ProgressMorphingButton
+import dev.barabu.morph.extentions.LOG_TAG
 import dev.barabu.morph.generator.IndeterminateProgressGenerator
 import dev.barabu.morph.generator.ProgressGenerator
 import dev.barabu.morph.generator.ProgressGenerator.Companion.MAX_PROGRESS
@@ -43,6 +45,10 @@ class LinearProgressButton : ProgressMorphingButton {
         }
     }
 
+    override fun morphToResult(params: Params) {
+        Log.d(LOG_TAG, "${object {}.javaClass.enclosingMethod?.name} not yet implemented")
+    }
+
     override fun morphToResult(
         colorNormal: Int,
         colorPressed: Int,
@@ -54,7 +60,7 @@ class LinearProgressButton : ProgressMorphingButton {
         strokeColor: Int,
         strokeWidth: Int
     ) {
-        TODO("Not yet implemented")
+        Log.d(LOG_TAG, "${object {}.javaClass.enclosingMethod?.name} not yet implemented")
     }
 }
 
