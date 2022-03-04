@@ -8,5 +8,6 @@
     <string name="button_text_circle_gradient_edge">gradient edge</string>
     <string name="button_text_circle_gradient_inside">gradient inside</string>
     <string name="button_text_circle_dots_gradient">gradient dots</string>
+    <string name="button_text_circle_dots_gradient_edge">outlined</string>
 
 </resources>

@@ -103,7 +103,9 @@ class CircularGradientProgressButton : ProgressMorphingButton, Gradient {
         width: Int,
         height: Int,
         duration: Int,
-        ringPadding: Float
+        ringPadding: Float,
+        strokeColor: Int,
+        strokeWidth: Int
     ) {
 
         this.sweepGradient =
@@ -117,7 +119,9 @@ class CircularGradientProgressButton : ProgressMorphingButton, Gradient {
             width,
             height,
             duration,
-            ringPadding
+            ringPadding,
+            strokeColor,
+            strokeWidth
         )
     }
 
@@ -128,7 +132,9 @@ class CircularGradientProgressButton : ProgressMorphingButton, Gradient {
         width: Int,
         height: Int,
         duration: Int,
-        iconId: Int
+        iconId: Int,
+        strokeColor: Int,
+        strokeWidth: Int
     ) {
         (generator as InterruptibleProgressGenerator).interrupt()
 
@@ -141,6 +147,8 @@ class CircularGradientProgressButton : ProgressMorphingButton, Gradient {
                 colorPressed = colorPressed,
                 duration = duration,
                 icon = AnchorIcon(l = iconId),
+                strokeColor = strokeColor,
+                strokeWidth = strokeWidth,
                 animationListener = object : MorphingAnimation.Listener {
                     override fun onAnimationStart() {
                     }
@@ -153,6 +161,7 @@ class CircularGradientProgressButton : ProgressMorphingButton, Gradient {
             morph(params)
         }
     }
+
 
     override fun updateProgress(progress: Int) {
         this.progress = progress

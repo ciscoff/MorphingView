@@ -44,6 +44,9 @@ abstract class ProgressMorphingButton : MorphingButton, ProgressConsumer {
         invalidate()
     }
 
+    /**
+     * Любой morph - это смена пары цветов colorNormal/colorPressed
+     */
     open fun morphToProgress(
         color: Int,
         progressPrimaryColor: Int,
@@ -52,8 +55,11 @@ abstract class ProgressMorphingButton : MorphingButton, ProgressConsumer {
         width: Int,
         height: Int,
         duration: Int,
-        ringPadding: Float = 0f
+        ringPadding: Float = 0f,
+        strokeColor: Int,
+        strokeWidth: Int
     ) {
+        // todo вот этот блок не нужен. он повторяется в morph()
         this.cornerRadius = progressCornerRadius
         this.primaryColor = progressPrimaryColor
         this.secondaryColor = progressSecondaryColor
@@ -68,6 +74,8 @@ abstract class ProgressMorphingButton : MorphingButton, ProgressConsumer {
             colorNormal = color,
             colorPressed = color,
             duration = duration,
+            strokeColor = strokeColor,
+            strokeWidth = strokeWidth,
             animationListener = object : MorphingAnimation.Listener {
                 override fun onAnimationStart() {
                 }
@@ -81,6 +89,9 @@ abstract class ProgressMorphingButton : MorphingButton, ProgressConsumer {
         morph(params)
     }
 
+    /**
+     * Любой morph - это смена пары цветов colorNormal/colorPressed
+     */
     abstract fun morphToResult(
         colorNormal: Int,
         colorPressed: Int,
@@ -88,7 +99,9 @@ abstract class ProgressMorphingButton : MorphingButton, ProgressConsumer {
         width: Int,
         height: Int,
         duration: Int,
-        iconId: Int
+        iconId: Int,
+        strokeColor: Int,
+        strokeWidth: Int
     )
 
     /**

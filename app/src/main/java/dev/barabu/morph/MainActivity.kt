@@ -4,7 +4,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import androidx.core.content.ContextCompat
+import androidx.annotation.DrawableRes
 import dev.barabu.morph.button.*
 import dev.barabu.morph.databinding.ActivityMainBinding
 
@@ -16,6 +16,7 @@ class MainActivity : BaseActivity() {
     private var isMultiStateButtonInTextMode = true
     private var isMtsButtonInTextMode = true
     private var isDottedButtonInTextMode = true
+    private var isLineAndDottedButtonInTextMode = true
 
     private val viewBinding by lazy(LazyThreadSafetyMode.NONE) {
         ActivityMainBinding.inflate(layoutInflater)
@@ -30,16 +31,30 @@ class MainActivity : BaseActivity() {
             setOnClickListener {
 
                 if (isRectButtonInTextMode) {
-                    morphToSuccess()
+                    morphToSuccess(
+                        color(android.R.color.holo_orange_dark),
+                        dimen(R.dimen.cycle_outline_stroke_width_2dp).toInt()
+                    )
                 } else {
                     morphToRect(
                         integer(R.integer.animation_duration),
-                        string(R.string.button_text_simple)
+                        string(R.string.button_text_simple),
+                        color(android.R.color.white),
+                        color(android.R.color.darker_gray),
+                        color(android.R.color.holo_blue_dark),
+                        dimen(R.dimen.cycle_outline_stroke_width_2dp).toInt()
                     )
                 }
                 isRectButtonInTextMode = !isRectButtonInTextMode
             }
-            morphToRect(0, string(R.string.button_text_simple))
+            morphToRect(
+                integer(R.integer.animation_duration),
+                string(R.string.button_text_simple),
+                color(android.R.color.white),
+                color(android.R.color.darker_gray),
+                color(android.R.color.holo_blue_dark),
+                dimen(R.dimen.cycle_outline_stroke_width_2dp).toInt()
+            )
         }
 
         // Горизонтальная линия прогресса
@@ -137,7 +152,9 @@ class MainActivity : BaseActivity() {
                             color(android.R.color.holo_blue_light),
                             color(android.R.color.holo_blue_dark),
                             color(android.R.color.holo_red_light),
-                            color(android.R.color.holo_red_dark)
+                            color(android.R.color.holo_red_dark),
+                            color(android.R.color.darker_gray),
+                            dimen(R.dimen.cycle_outline_stroke_width_2dp).toInt()
                         )
                     }, 2000)
 
@@ -169,8 +186,8 @@ class MainActivity : BaseActivity() {
                             color(android.R.color.holo_blue_light),
                             color(android.R.color.holo_blue_dark),
                             color(android.R.color.holo_red_light),
-                            color(android.R.color.holo_red_dark)
-                        )
+                            color(android.R.color.holo_red_dark),
+                         )
                     }, 2000)
                 } else {
                     morphToFabRect(
@@ -182,18 +199,60 @@ class MainActivity : BaseActivity() {
             }
             morphToFabRect(0, string(R.string.button_text_circle_dots_gradient))
         }
+
+        viewBinding.buttonDottedOutlined.apply {
+            setOnClickListener {
+                //button_text_circle_dots_gradient_edge
+                if (isLineAndDottedButtonInTextMode) {
+                    startCircularProgress(
+                        primaryColor = Color.WHITE,
+                        secondaryColor = color(R.color.ds_mts_red),
+                        backgroundColor = color(R.color.ds_mts_red),
+                        padding = dimen(R.dimen.cycle_progress_padding_4dp)
+                    )
+
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        stopCircularProgress(
+                            OpResult.Success,
+                            color(android.R.color.white),
+                            color(R.color.gray_A200),
+                            color(android.R.color.holo_red_light),
+                            color(android.R.color.holo_red_dark),
+                            color(R.color.ds_mts_red),
+                            dimen(R.dimen.cycle_outline_stroke_width_2dp).toInt(),
+                            R.drawable.ic_done_red,
+                            R.drawable.ic_error
+                        )
+                    }, 2000)
+                } else {
+                    morphToFabRect(
+                        integer(R.integer.animation_duration),
+                        string(R.string.button_text_circle_dots_gradient)
+                    )
+                }
+
+                isLineAndDottedButtonInTextMode = !isLineAndDottedButtonInTextMode
+            }
+            morphToFabRect(0, string(R.string.button_text_circle_dots_gradient))
+        }
     }
 
     private fun MorphingButton.morphToRect(
         duration: Int,
-        text: String = getString(R.string.text_button)
+        text: String = getString(R.string.text_button),
+        colorNormal: Int = color(android.R.color.holo_blue_light),
+        colorPressed: Int = color(android.R.color.holo_blue_dark),
+        strokeColor: Int = Color.TRANSPARENT,
+        strokeWidth: Int = 0
     ) {
         val params = MorphingButton.Params(
             cornerRadius = dimen(R.dimen.corner_radius_2dp),
             width = dimen(R.dimen.button_rectangle_width).toInt(),
             height = dimen(R.dimen.button_rectangle_height).toInt(),
-            colorNormal = color(android.R.color.holo_blue_light),
-            colorPressed = color(android.R.color.holo_blue_dark),
+            colorNormal = colorNormal,
+            colorPressed = colorPressed,
+            strokeColor = strokeColor,
+            strokeWidth = strokeWidth,
             duration = duration,
             text = text
         )
@@ -202,7 +261,9 @@ class MainActivity : BaseActivity() {
 
     private fun MorphingButton.morphToFabRect(
         duration: Int,
-        text: String = getString(R.string.text_button)
+        text: String = getString(R.string.text_button),
+        strokeColor: Int = Color.TRANSPARENT,
+        strokeWidth: Int = 0
     ) {
         val params = MorphingButton.Params(
             cornerRadius = dimen(R.dimen.corner_radius_fab),
@@ -211,13 +272,18 @@ class MainActivity : BaseActivity() {
             colorNormal = color(R.color.ds_mts_red),
             colorPressed = color(android.R.color.holo_red_dark),
             duration = duration,
+            strokeColor = strokeColor,
+            strokeWidth = strokeWidth,
             text = text,
             icon = AnchorIcon(0, 0, R.drawable.ic_send, 0)
         )
         morph(params)
     }
 
-    private fun MorphingButton.morphToSuccess() {
+    private fun MorphingButton.morphToSuccess(
+        strokeColor: Int = Color.TRANSPARENT,
+        strokeWidth: Int = 0
+    ) {
         val params = MorphingButton.Params(
             cornerRadius = dimen(R.dimen.corner_radius_fab),
             width = dimen(R.dimen.button_square).toInt(),
@@ -225,18 +291,17 @@ class MainActivity : BaseActivity() {
             colorNormal = color(android.R.color.holo_green_light),
             colorPressed = color(android.R.color.holo_green_dark),
             duration = integer(R.integer.animation_duration),
+            strokeColor = strokeColor,
+            strokeWidth = strokeWidth,
             icon = AnchorIcon(l = R.drawable.ic_done)
         )
         morph(params)
     }
 
     private fun ProgressMorphingButton.startLinearProgress() {
-        val color =
-            ContextCompat.getColor(this@MainActivity, R.color.cycle_progress_clipping)
-        val progressForegroundColor =
-            ContextCompat.getColor(this@MainActivity, R.color.cycle_progress_foreground)
-        val progressBackgroundColor =
-            ContextCompat.getColor(this@MainActivity, R.color.cycle_progress_background)
+        val color = color(R.color.cycle_progress_clipping)
+        val progressForegroundColor = color(R.color.cycle_progress_foreground)
+        val progressBackgroundColor = color(R.color.cycle_progress_background)
         val progressCornerRadius = dimen(R.dimen.corner_radius_4dp)
         val width = dimen(R.dimen.button_rectangle_width).toInt()
         val height = dimen(R.dimen.button_progress_height).toInt()
@@ -249,7 +314,10 @@ class MainActivity : BaseActivity() {
             progressCornerRadius,
             width,
             height,
-            duration
+            duration,
+            0f,
+            Color.TRANSPARENT,
+            0
         )
     }
 
@@ -286,7 +354,9 @@ class MainActivity : BaseActivity() {
             width,
             height,
             duration,
-            padding
+            padding,
+            Color.TRANSPARENT,
+            0
         )
     }
 
@@ -296,6 +366,10 @@ class MainActivity : BaseActivity() {
         successColorPressed: Int,
         failureColorNormal: Int,
         failureColorPressed: Int,
+        strokeColor: Int = Color.TRANSPARENT,
+        strokeWidth: Int = 0,
+        @DrawableRes successIcon: Int = R.drawable.ic_done,
+        @DrawableRes failureIcon: Int = R.drawable.ic_error
     ) {
         when (result) {
             OpResult.Success -> {
@@ -306,7 +380,9 @@ class MainActivity : BaseActivity() {
                     dimen(R.dimen.button_square).toInt(),
                     dimen(R.dimen.button_square).toInt(),
                     300,
-                    R.drawable.ic_done
+                    successIcon,
+                    strokeColor,
+                    strokeWidth
                 )
             }
             OpResult.Failure -> {
@@ -317,7 +393,9 @@ class MainActivity : BaseActivity() {
                     dimen(R.dimen.button_square).toInt(),
                     dimen(R.dimen.button_square).toInt(),
                     300,
-                    R.drawable.ic_error
+                    failureIcon,
+                    strokeColor,
+                    strokeWidth
                 )
             }
         }

@@ -50,7 +50,9 @@ class LinearProgressButton : ProgressMorphingButton {
         width: Int,
         height: Int,
         duration: Int,
-        iconId: Int
+        iconId: Int,
+        strokeColor: Int,
+        strokeWidth: Int
     ) {
         TODO("Not yet implemented")
     }

@@ -55,8 +55,8 @@ open class MorphingButton : AppCompatButton {
 
     private fun initView() {
         padding = Padding(paddingLeft, paddingTop, paddingRight, paddingBottom)
-        drawableNormal = createDrawable(colorNormal, cornerRadius, STROKE_WIDTH_ZERO)
-        drawablePressed = createDrawable(colorPressed, cornerRadius, STROKE_WIDTH_ZERO)
+        drawableNormal = createDrawable(colorNormal, cornerRadius)
+        drawablePressed = createDrawable(colorPressed, cornerRadius)
 
         val background = StateListDrawable().apply {
             val statePressed = intArrayOf(android.R.attr.state_pressed)
@@ -66,6 +66,10 @@ open class MorphingButton : AppCompatButton {
         setBackground(background)
     }
 
+    /**
+     * Morph всегда выполняется в состоянии Normal.
+     * В одной "паре" Normal/Pressed параметры обводки (strokeColor/strokeWidth) одинаковы.
+     */
     open fun morph(params: Params) {
         if (isMorphingInProgress) {
             return
@@ -86,10 +90,10 @@ open class MorphingButton : AppCompatButton {
             morphWithAnimation(params)
         }
 
+        cornerRadius = params.cornerRadius
         colorNormal = params.colorNormal
         strokeColor = params.strokeColor
         strokeWidth = params.strokeWidth
-        cornerRadius = params.cornerRadius
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -202,7 +206,7 @@ open class MorphingButton : AppCompatButton {
     private fun createDrawable(
         color: Int,
         cornerRadius: Float,
-        strokeWidth: Int
+        strokeWidth: Int = STROKE_WIDTH_ZERO
     ): GradientDrawableDelegate {
         return GradientDrawableDelegate(GradientDrawable()).apply {
             gradientDrawable.shape = GradientDrawable.RECTANGLE

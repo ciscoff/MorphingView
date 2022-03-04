@@ -114,7 +114,9 @@ class CircularColoredProgressButton : ProgressMorphingButton {
         width: Int,
         height: Int,
         duration: Int,
-        iconId: Int
+        iconId: Int,
+        strokeColor: Int,
+        strokeWidth: Int
     ) {
         (generator as InterruptibleProgressGenerator).interrupt()
 
@@ -127,6 +129,8 @@ class CircularColoredProgressButton : ProgressMorphingButton {
                 colorPressed = colorPressed,
                 duration = duration,
                 icon = AnchorIcon(l = iconId),
+                strokeColor = strokeColor,
+                strokeWidth = strokeWidth,
                 animationListener = object : MorphingAnimation.Listener {
                     override fun onAnimationStart() {
                     }

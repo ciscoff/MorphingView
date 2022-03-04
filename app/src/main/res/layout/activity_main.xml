@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_20dp"
-        android:textColor="@android:color/white"
+        android:textColor="@android:color/holo_blue_dark"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -54,7 +54,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/button_circular_colored_progress" />
 
-    <dev.barabu.morph.impl.MtsCircularGradientProgressButton
+    <dev.barabu.morph.impl.CircularMtsGradientProgressButton
         android:id="@+id/button_mts"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -73,5 +73,15 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/button_mts" />
+
+    <dev.barabu.morph.impl.CircularDottedOutlinedProgressButton
+        android:id="@+id/button_dotted_outlined"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_20dp"
+        android:textColor="@android:color/white"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/button_dotted" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

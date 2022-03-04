@@ -1,27 +1,50 @@
 package dev.barabu.morph.impl
 
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Path
-import android.graphics.RectF
-import android.graphics.SweepGradient
+import android.graphics.*
 import android.util.AttributeSet
 import dev.barabu.morph.button.AnchorIcon
+import dev.barabu.morph.button.Gradient
 import dev.barabu.morph.button.MorphingAnimation
 import dev.barabu.morph.button.ProgressMorphingButton
 import dev.barabu.morph.generator.InterruptibleProgressGenerator
 import dev.barabu.morph.generator.ProgressGenerator
+import kotlin.math.PI
 import kotlin.math.min
 
-class MtsCircularGradientProgressButton : ProgressMorphingButton {
+class CircularDottedOutlinedProgressButton : ProgressMorphingButton, Gradient {
 
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
 
     private lateinit var sweepGradient: SweepGradient
 
-    private val rectProgress = RectF()
-    private var clipPath: Path? = null
+    /**
+     * Контур прогресса - окружность
+     */
+    private lateinit var pathProgress: Path
+
+    /**
+     * Отдельная точка в колесе прогресса
+     */
+    private lateinit var pathDot: Path
+
+    /**
+     * Расчитать размеры точки в колесе прогресса. Размер точек и промежутков между ними одинаковы.
+     * Поэтому длину окружности делим на удвоенное количество точек.
+     */
+    private val dotSize: Float
+        get() {
+            val circleDiameter = min(width, height) - ringPadding * 2
+            return (circleDiameter * PI.toFloat()) / (DOTS_QTY * 2)
+        }
+
+    /**
+     * Paint для заливки точек прогресса. Она будет красить градиентом.
+     */
+    override val paintProgress: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        style = Paint.Style.FILL_AND_STROKE
+    }
 
     override var generator: ProgressGenerator = InterruptibleProgressGenerator(
         object : ProgressGenerator.OnCompleteListener {
@@ -43,56 +66,39 @@ class MtsCircularGradientProgressButton : ProgressMorphingButton {
             progress <= ProgressGenerator.MAX_PROGRESS
         ) {
             val circleSize = min(width, height) - ringPadding * 2
-            val horMargin = (width - circleSize) / 2f
-            val verMargin = (height - circleSize) / 2f
-            val clipWidth = circleSize - progressStrokeWidth * 2
 
-            if (clipPath == null) {
-                paintProgress.shader = sweepGradient
-
-                val clipX = (width - clipWidth) / 2
-                val clipY = (height - clipWidth) / 2
-
-                clipPath = Path().apply {
-                    addArc(
-                        clipX,
-                        clipY,
-                        clipX + clipWidth,
-                        clipY + clipWidth,
-                        0f,
-                        360f
-                    )
+            if (!::pathProgress.isInitialized) {
+                // контур прогресса - кольцо
+                pathProgress = Path().apply {
+                    addCircle(width / 2f, height / 2f, circleSize / 2f, Path.Direction.CW)
                 }
-            }
 
-            rectProgress.apply {
-                left = 0f
-                top = 0f
-                bottom = height.toFloat()
-                right = width.toFloat()
+                // отдельная точка
+                pathDot = Path().apply {
+                    addOval(RectF(0f, 0f, dotSize, dotSize), Path.Direction.CW)
+                }
+
+                // эффект рисования Path'a другим Path'ом
+                paintProgress.apply {
+                    pathEffect =
+                        PathDashPathEffect(
+                            pathDot,
+                            dotSize * 2,
+                            0f,
+                            PathDashPathEffect.Style.ROTATE
+                        )
+                    shader = sweepGradient
+                }
             }
 
             canvas?.apply {
                 save()
-
-                clipRect(rectProgress)
-                clipPathCompat(canvas, clipPath!!)
-
                 rotate(
                     360f * (progress.toFloat() / ProgressGenerator.MAX_PROGRESS),
                     width / 2f,
                     height / 2f
                 )
-                drawArc(
-                    horMargin,
-                    verMargin,
-                    horMargin + circleSize,
-                    verMargin + circleSize,
-                    0f,
-                    360f,
-                    true,
-                    paintProgress
-                )
+                drawPath(pathProgress, paintProgress)
                 restore()
             }
         }
@@ -106,7 +112,9 @@ class MtsCircularGradientProgressButton : ProgressMorphingButton {
         width: Int,
         height: Int,
         duration: Int,
-        ringPadding: Float
+        ringPadding: Float,
+        strokeColor: Int,
+        strokeWidth: Int
     ) {
 
         this.sweepGradient =
@@ -120,7 +128,9 @@ class MtsCircularGradientProgressButton : ProgressMorphingButton {
             width,
             height,
             duration,
-            ringPadding
+            ringPadding,
+            strokeColor,
+            strokeWidth
         )
     }
 
@@ -131,7 +141,9 @@ class MtsCircularGradientProgressButton : ProgressMorphingButton {
         width: Int,
         height: Int,
         duration: Int,
-        iconId: Int
+        iconId: Int,
+        strokeColor: Int,
+        strokeWidth: Int
     ) {
         (generator as InterruptibleProgressGenerator).interrupt()
 
@@ -144,6 +156,8 @@ class MtsCircularGradientProgressButton : ProgressMorphingButton {
                 colorPressed = colorPressed,
                 duration = duration,
                 icon = AnchorIcon(l = iconId),
+                strokeColor = strokeColor,
+                strokeWidth = strokeWidth,
                 animationListener = object : MorphingAnimation.Listener {
                     override fun onAnimationStart() {
                     }
@@ -160,5 +174,12 @@ class MtsCircularGradientProgressButton : ProgressMorphingButton {
     override fun updateProgress(progress: Int) {
         this.progress = progress
         invalidate()
+    }
+
+    companion object {
+        /**
+         * Количество точек в колесе прогресса
+         */
+        private const val DOTS_QTY = 12
     }
 }
