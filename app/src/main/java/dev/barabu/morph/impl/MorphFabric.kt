@@ -2,6 +2,7 @@ package dev.barabu.morph.impl
 
 import android.content.Context
 import android.graphics.Color
+import androidx.annotation.DimenRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.IntegerRes
 import androidx.annotation.StringRes
@@ -44,16 +45,17 @@ class MorphFabric(private val context: Context) {
             colorPrimary = color(R.color.cycle_progress_foreground),
             colorSecondary = color(R.color.cycle_progress_background),
             colorBackground = Color.TRANSPARENT,
+            strokeColor = color(R.color.cycle_progress_background),
+            strokeWidth = dimen(R.dimen.button_outline_stroke_width_2dp).toInt(),
             duration = integer(durationId),
             ringPadding = 0f
         )
     }
 
-    fun progressCircularGradient(
-        @IntegerRes durationId: Int = R.integer.morph_duration_default
+    fun progressCircularGradientGreenWhite(
+        @IntegerRes durationId: Int = R.integer.morph_duration_default,
+        @DimenRes paddingId: Int = R.dimen.cycle_progress_padding_0dp
     ) : MorphingButton.ProgressParams = with(context) {
-        check(integer(durationId) > 0)
-
         MorphingButton.ProgressParams(
             cornerRadius = dimen(R.dimen.corner_radius_fab),
             width = dimen(R.dimen.button_square).toInt(),
@@ -62,7 +64,41 @@ class MorphFabric(private val context: Context) {
             colorSecondary = color(R.color.cycle_progress_head),  // head
             colorBackground = Color.TRANSPARENT,
             duration = integer(durationId), // duration для морфа, а не прогресса
-            ringPadding = 0f
+            ringPadding = dimen(paddingId)
+        )
+    }
+
+    fun progressCircularGradientNavyWhite(
+        @IntegerRes durationId: Int = R.integer.morph_duration_default,
+        @DimenRes paddingId: Int = R.dimen.cycle_progress_padding_0dp
+    ) : MorphingButton.ProgressParams = with(context) {
+        MorphingButton.ProgressParams(
+            cornerRadius = dimen(R.dimen.corner_radius_fab),
+            width = dimen(R.dimen.button_square).toInt(),
+            height = dimen(R.dimen.button_square).toInt(),
+            colorPrimary = color(android.R.color.white),    // tail
+            colorSecondary = color(R.color.navy),  // head
+            colorBackground = Color.TRANSPARENT,
+            strokeColor = color(R.color.navy_semi_transparent),
+            strokeWidth = dimen(R.dimen.button_outline_stroke_width_2dp).toInt(),
+            duration = integer(durationId), // duration для морфа, а не прогресса
+            ringPadding = dimen(paddingId)
+        )
+    }
+
+    fun progressCircularGradientWhitePink(
+        @IntegerRes durationId: Int = R.integer.morph_duration_default,
+        @DimenRes paddingId: Int = R.dimen.cycle_progress_padding_2dp
+    ) : MorphingButton.ProgressParams = with(context) {
+        MorphingButton.ProgressParams(
+            cornerRadius = dimen(R.dimen.corner_radius_fab),
+            width = dimen(R.dimen.button_square).toInt(),
+            height = dimen(R.dimen.button_square).toInt(),
+            colorPrimary = color(R.color.ds_mts_pink),    // tail
+            colorSecondary = Color.WHITE,  // head
+            colorBackground = color(R.color.ds_mts_red),
+            duration = integer(durationId), // duration для морфа, а не прогресса
+            ringPadding = dimen(paddingId)
         )
     }
     //endregion
@@ -120,12 +156,12 @@ class MorphFabric(private val context: Context) {
             cornerRadius = dimen(R.dimen.default_corner_radius),
             width = dimen(R.dimen.button_rectangle_width).toInt(),
             height = dimen(R.dimen.button_rectangle_height).toInt(),
-            colorNormal = color(android.R.color.white),
-            colorPressed = color(android.R.color.darker_gray),
+            colorNormal = Color.TRANSPARENT,
+            colorPressed = Color.TRANSPARENT,
             colorText = color(android.R.color.holo_blue_dark),
             strokeColor = color(android.R.color.holo_blue_dark),
             strokeWidth = dimen(R.dimen.button_outline_stroke_width_3dp).toInt(),
-            duration = durationId,
+            duration = context.integer(durationId),
             text = string(stringId)
         )
     }

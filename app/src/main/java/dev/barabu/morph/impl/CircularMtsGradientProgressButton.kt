@@ -95,6 +95,22 @@ class CircularMtsGradientProgressButton : ProgressMorphingButton {
         }
     }
 
+    /**
+     * NOTE: Для расчета координат центра нужно использовать размеры ПОСЛЕ морфа. На момент
+     * вызова этой функции кнопка еще прямоугольная !!!
+     */
+    override fun morphToProgress(progressParams: ProgressParams) {
+
+        this.sweepGradient = SweepGradient(
+            progressParams.width / 2f,
+            progressParams.height / 2f,
+            progressParams.colorPrimary,
+            progressParams.colorSecondary
+        )
+
+        super.morphToProgress(progressParams)
+    }
+
     override fun morphToProgress(
         color: Int,
         progressPrimaryColor: Int,
@@ -126,7 +142,19 @@ class CircularMtsGradientProgressButton : ProgressMorphingButton {
     }
 
     override fun morphToResult(params: Params) {
-        TODO("Not yet implemented")
+        params.apply {
+            animationListener = object : MorphingAnimation.Listener {
+                override fun onAnimationStart() {
+                }
+
+                override fun onAnimationEnd() {
+                    unBlockTouch()
+                }
+            }
+        }
+
+        postProgressOp = { morph(params) }
+        (generator as InterruptibleProgressGenerator).interrupt()
     }
 
     override fun morphToResult(

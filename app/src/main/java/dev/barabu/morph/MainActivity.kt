@@ -1,11 +1,12 @@
 package dev.barabu.morph
 
-import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
-import dev.barabu.morph.button.*
+import dev.barabu.morph.button.MorphingButton
+import dev.barabu.morph.button.OpResult
+import dev.barabu.morph.button.ProgressMorphingButton
 import dev.barabu.morph.databinding.ActivityMainBinding
 import dev.barabu.morph.extentions.*
 import dev.barabu.morph.impl.MorphFabric
@@ -79,44 +80,33 @@ class MainActivity : AppCompatActivity() {
             setOnClickListener {
                 if (isMultiStateButtonInTextMode) {
                     // todo Progress
-                    progress(morphFabric.progressCircularGradient())
+                    progress(morphFabric.progressCircularGradientNavyWhite())
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        result(morphFabric.outlinedIconButtonBlueBackNavyStroke())
+                    }, 2000)
+                } else {
+                    prepare(morphFabric.outlinedTextButtonWhiteBackBlueStroke(R.integer.morph_duration_default))
+                }
+                isMultiStateButtonInTextMode = !isMultiStateButtonInTextMode
+            }
+            prepare(morphFabric.outlinedTextButtonWhiteBackBlueStroke())
+        }
+
+        // Круговой прогресс из градиентной окружности внутри View
+        viewBinding.buttonMts.apply {
+            setOnClickListener {
+                if (isMtsButtonInTextMode) {
+                    progress(morphFabric.progressCircularGradientWhitePink())
                     Handler(Looper.getMainLooper()).postDelayed({
                         result(morphFabric.containedIconButtonGreenBackWhiteIcon())
                     }, 2000)
                 } else {
-                    prepare(morphFabric.containedTextButtonDefault(R.integer.morph_duration_default))
+                    prepare(morphFabric.containedFabRedBackIconRight(R.integer.morph_duration_default))
                 }
-                isMultiStateButtonInTextMode = !isMultiStateButtonInTextMode
+                isMtsButtonInTextMode = !isMtsButtonInTextMode
             }
-            prepare(morphFabric.containedTextButtonDefault())
+            prepare(morphFabric.containedFabRedBackIconRight())
         }
-//
-//        // Круговой прогресс из градиентной окружности внутри View
-//        viewBinding.buttonMts.apply {
-//
-//            setOnClickListener {
-//                if (isMtsButtonInTextMode) {
-//                    startCircularProgress(
-//                        color(R.color.ds_mts_pink),
-//                        Color.WHITE,
-//                        color(R.color.ds_mts_red),
-//                        dimen(R.dimen.cycle_progress_padding_2dp)
-//                    )
-//
-//                    Handler(Looper.getMainLooper()).postDelayed({
-//                        stopCircularProgressWithDarkBlueIconAndBorder()
-//                    }, 2000)
-//
-//                } else {
-//                    morphToFabRect(
-//                        integer(R.integer.animation_duration),
-//                        string(R.string.button_text_circle_gradient_inside)
-//                    )
-//                }
-//                isMtsButtonInTextMode = !isMtsButtonInTextMode
-//            }
-//            morphToFabRect(0, string(R.string.button_text_circle_gradient_inside))
-//        }
 //
 //        // Круговой прогресс из градиентной окружности точек внутри View
 //        viewBinding.buttonDotted.apply {
