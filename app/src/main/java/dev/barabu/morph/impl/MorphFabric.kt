@@ -47,7 +47,23 @@ class MorphFabric(private val context: Context) {
             duration = integer(durationId),
             ringPadding = 0f
         )
+    }
 
+    fun progressCircularGradient(
+        @IntegerRes durationId: Int = R.integer.morph_duration_default
+    ) : MorphingButton.ProgressParams = with(context) {
+        check(integer(durationId) > 0)
+
+        MorphingButton.ProgressParams(
+            cornerRadius = dimen(R.dimen.corner_radius_fab),
+            width = dimen(R.dimen.button_square).toInt(),
+            height = dimen(R.dimen.button_square).toInt(),
+            colorPrimary = color(R.color.cycle_progress_tail),    // tail
+            colorSecondary = color(R.color.cycle_progress_head),  // head
+            colorBackground = Color.TRANSPARENT,
+            duration = integer(durationId), // duration для морфа, а не прогресса
+            ringPadding = 0f
+        )
     }
     //endregion
 

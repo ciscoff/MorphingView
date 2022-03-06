@@ -50,6 +50,8 @@ abstract class ProgressMorphingButton : MorphingButton, ProgressConsumer {
         this.secondaryColor = progressParams.colorSecondary
         this.ringPadding = progressParams.ringPadding
 
+        blockTouch()
+
         val params = progressParams.toParams().apply {
             animationListener = object : MorphingAnimation.Listener {
                 override fun onAnimationStart() {
@@ -79,8 +81,6 @@ abstract class ProgressMorphingButton : MorphingButton, ProgressConsumer {
         strokeColor: Int,
         strokeWidth: Int
     ) {
-        // todo вот этот блок не нужен. он повторяется в morph()
-        this.cornerRadius = progressCornerRadius
         this.primaryColor = progressPrimaryColor
         this.secondaryColor = progressSecondaryColor
         this.ringPadding = ringPadding
@@ -136,11 +136,11 @@ abstract class ProgressMorphingButton : MorphingButton, ProgressConsumer {
      * Визуально работу различных Region.Op можно посмотреть тут:
      * https://startandroid.ru/ru/uroki/vse-uroki-spiskom/325-urok-147-risovanie-region.html
      */
-    protected fun clipPathCompat(canvas: Canvas, path: Path) {
+    protected fun Canvas.clipPathCompat(path: Path) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            canvas.clipOutPath(path)
+            clipOutPath(path)
         } else {
-            canvas.clipPath(path, Region.Op.DIFFERENCE)
+            clipPath(path, Region.Op.DIFFERENCE)
         }
     }
 }

@@ -78,7 +78,7 @@ class CircularColoredProgressButton : ProgressMorphingButton {
 
                 // Clipping в центре в форме круга
                 clipRect(rectProgress)
-                clipPathCompat(canvas, clipPath!!)
+                clipPathCompat(clipPath!!)
 
                 rectProgress.apply {
                     left = horMargin

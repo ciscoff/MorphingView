@@ -17,6 +17,8 @@
 
     <color name="cycle_progress_foreground">#388e3c</color>
     <color name="cycle_progress_background">#d7ffd9</color>
+    <color name="cycle_progress_head">#388e3c</color>
+    <color name="cycle_progress_tail">#d7ffd9</color>
     <color name="cycle_progress_clipping">#ffffff</color>
 
     <color name="linear_progress_background">@android:color/white</color>

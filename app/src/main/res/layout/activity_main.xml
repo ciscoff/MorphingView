@@ -42,15 +42,15 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/button_linear_progress_container" />
 
-<!--    <dev.barabu.morph.impl.CircularGradientProgressButton-->
-<!--        android:id="@+id/button_circular_gradient_progress"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginTop="@dimen/margin_20dp"-->
-<!--        android:textColor="@android:color/white"-->
-<!--        app:layout_constraintLeft_toLeftOf="parent"-->
-<!--        app:layout_constraintRight_toRightOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@id/button_circular_colored_progress" />-->
+    <dev.barabu.morph.impl.CircularGradientProgressButton
+        android:id="@+id/button_circular_gradient_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_20dp"
+        android:textColor="@android:color/white"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/button_circular_colored_progress" />
 
 <!--    <dev.barabu.morph.impl.CircularMtsGradientProgressButton-->
 <!--        android:id="@+id/button_mts"-->

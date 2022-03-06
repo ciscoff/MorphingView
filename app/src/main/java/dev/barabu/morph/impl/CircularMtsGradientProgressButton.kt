@@ -73,7 +73,7 @@ class CircularMtsGradientProgressButton : ProgressMorphingButton {
                 save()
 
                 clipRect(rectProgress)
-                clipPathCompat(canvas, clipPath!!)
+                clipPathCompat(clipPath!!)
 
                 rotate(
                     360f * (progress.toFloat() / ProgressGenerator.MAX_PROGRESS),
