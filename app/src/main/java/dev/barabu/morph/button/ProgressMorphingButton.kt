@@ -44,6 +44,9 @@ abstract class ProgressMorphingButton : MorphingButton, ProgressConsumer {
         invalidate()
     }
 
+    /**
+     * Любой morph - это смена пары цветов colorNormal/colorPressed
+     */
     open fun morphToProgress(progressParams: ProgressParams) {
 
         this.primaryColor = progressParams.colorPrimary
@@ -66,67 +69,7 @@ abstract class ProgressMorphingButton : MorphingButton, ProgressConsumer {
         morph(params)
     }
 
-    /**
-     * Любой morph - это смена пары цветов colorNormal/colorPressed
-     */
-    open fun morphToProgress(
-        color: Int,
-        progressPrimaryColor: Int,
-        progressSecondaryColor: Int,
-        progressCornerRadius: Float,
-        width: Int,
-        height: Int,
-        duration: Int,
-        ringPadding: Float = 0f,
-        strokeColor: Int,
-        strokeWidth: Int
-    ) {
-        this.primaryColor = progressPrimaryColor
-        this.secondaryColor = progressSecondaryColor
-        this.ringPadding = ringPadding
-
-        blockTouch()
-
-        val params = Params(
-            cornerRadius = progressCornerRadius,
-            width = width,
-            height = height,
-            colorNormal = color,
-            colorPressed = color,
-            colorText = Color.WHITE,
-            duration = duration,
-            strokeColor = strokeColor,
-            strokeWidth = strokeWidth,
-            animationListener = object : MorphingAnimation.Listener {
-                override fun onAnimationStart() {
-                }
-
-                // Сразу после морфа формы кнопки запускаем анимацию прогресса
-                override fun onAnimationEnd() {
-                    generator.start(this@ProgressMorphingButton)
-                }
-            }
-        )
-        morph(params)
-    }
-
-    /**
-     * Любой morph - это смена пары цветов colorNormal/colorPressed
-     */
-
     abstract fun morphToResult(params: Params)
-
-    abstract fun morphToResult(
-        colorNormal: Int,
-        colorPressed: Int,
-        cornerRadius: Float,
-        width: Int,
-        height: Int,
-        duration: Int,
-        iconId: Int,
-        strokeColor: Int,
-        strokeWidth: Int
-    )
 
     /**
      * Region.Op.DIFFERENCE - для рисования выбирается область первого прямоугольника

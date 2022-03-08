@@ -28,6 +28,7 @@
 
     <color name="ds_mts_red">#e30611</color>
     <color name="ds_mts_pink">#ffcccc</color>
+    <color name="ds_mts_red_semi_transparent">#88e30611</color>
 
     <color name="gray_A050">#EEEEEE</color>
     <color name="gray_A100">#F7EEEE</color>

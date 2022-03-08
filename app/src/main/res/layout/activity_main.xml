@@ -60,24 +60,31 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/button_circular_gradient_progress" />
 
-<!--    <dev.barabu.morph.impl.CircularDottedProgressButton-->
-<!--        android:id="@+id/button_dotted"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginTop="@dimen/margin_20dp"-->
-<!--        android:textColor="@android:color/white"-->
-<!--        app:layout_constraintLeft_toLeftOf="parent"-->
-<!--        app:layout_constraintRight_toRightOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@id/button_mts" />-->
+    <dev.barabu.morph.impl.CircularDottedProgressButton
+        android:id="@+id/button_dotted"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_20dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/button_mts" />
 
-<!--    <dev.barabu.morph.impl.CircularDottedOutlinedProgressButton-->
-<!--        android:id="@+id/button_dotted_outlined"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginTop="@dimen/margin_20dp"-->
-<!--        android:textColor="@android:color/white"-->
-<!--        app:layout_constraintLeft_toLeftOf="parent"-->
-<!--        app:layout_constraintRight_toRightOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@id/button_dotted" />-->
+    <dev.barabu.morph.impl.CircularDottedOutlinedProgressButton
+        android:id="@+id/button_dotted_outlined"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_20dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/button_dotted" />
+
+    <dev.barabu.morph.impl.CircularDottedOutlinedProgressButton
+        android:id="@+id/button_dotted_outlined_white"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_20dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/button_dotted_outlined" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -49,18 +49,6 @@ class LinearProgressButton : ProgressMorphingButton {
         Log.d(LOG_TAG, "${object {}.javaClass.enclosingMethod?.name} not yet implemented")
     }
 
-    override fun morphToResult(
-        colorNormal: Int,
-        colorPressed: Int,
-        cornerRadius: Float,
-        width: Int,
-        height: Int,
-        duration: Int,
-        iconId: Int,
-        strokeColor: Int,
-        strokeWidth: Int
-    ) {
-        Log.d(LOG_TAG, "${object {}.javaClass.enclosingMethod?.name} not yet implemented")
-    }
+
 }
 

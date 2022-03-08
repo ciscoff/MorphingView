@@ -4,11 +4,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
-import dev.barabu.morph.button.MorphingButton
-import dev.barabu.morph.button.OpResult
-import dev.barabu.morph.button.ProgressMorphingButton
 import dev.barabu.morph.databinding.ActivityMainBinding
-import dev.barabu.morph.extentions.*
 import dev.barabu.morph.impl.MorphFabric
 
 class MainActivity : AppCompatActivity() {
@@ -20,6 +16,7 @@ class MainActivity : AppCompatActivity() {
     private var isMtsButtonInTextMode = true
     private var isDottedButtonInTextMode = true
     private var isLineAndDottedButtonInTextMode = true
+    private var isLineAndDottedWhiteButtonInTextMode = true
 
     private val morphFabric: MorphFabric = MorphFabric(this)
 
@@ -35,182 +32,124 @@ class MainActivity : AppCompatActivity() {
         viewBinding.buttonText.apply {
             setOnClickListener {
                 if (isRectButtonInTextMode) {
-                    morphTo(morphFabric.outlinedIconButtonBrownBackOrangeStroke())
+                    morph(morphFabric.outlinedIconButtonBrownBackOrangeStroke())
                 } else {
-                    morphTo(morphFabric.containedTextButtonDefault(R.integer.morph_duration_default))
+                    morph(morphFabric.containedTextButtonDefault(R.integer.morph_duration_default))
                 }
                 isRectButtonInTextMode = !isRectButtonInTextMode
             }
-            morphTo(morphFabric.containedTextButtonDefault())
+            morph(morphFabric.containedTextButtonDefault())
         }
 
         // Горизонтальная линия прогресса
         viewBinding.buttonLinearProgress.apply {
             setOnClickListener {
                 if (isLinearProgressButtonInTextMode) {
-                    progress(morphFabric.progressLinear())
+                    morphToProgress(morphFabric.progressLinear())
                 } else {
-                    morphTo(morphFabric.containedTextButtonDefault(R.integer.morph_duration_default))
+                    morph(morphFabric.containedTextButtonDefault(R.integer.morph_duration_default))
                 }
                 isLinearProgressButtonInTextMode = !isLinearProgressButtonInTextMode
             }
-            morphTo(morphFabric.containedTextButtonDefault())
+            morph(morphFabric.containedTextButtonDefault())
         }
 
         // Круговой прогресс из одноцветного сегмента
         viewBinding.buttonCircularColoredProgress.apply {
             setOnClickListener {
                 if (isCycleProgressButtonInTextMode) {
-                    // todo Progress
-                    progress(morphFabric.progressCircularGreenArcTransparentBack())
-                    // todo Result
+                    morphToProgress(morphFabric.progressCircularGreenArcTransparentBack())
                     Handler(Looper.getMainLooper()).postDelayed({
-                        result(morphFabric.containedIconButtonGreenBackWhiteIcon())
-                    }, 2000)
+                        morphToResult(morphFabric.containedIconButtonGreenBackWhiteIcon())
+                    }, RESULT_DELAY)
                 } else {
-                    prepare(morphFabric.containedTextButtonDefault(R.integer.morph_duration_default))
+                    morph(morphFabric.containedTextButtonDefault(R.integer.morph_duration_default))
                 }
                 isCycleProgressButtonInTextMode = !isCycleProgressButtonInTextMode
             }
-            prepare(morphFabric.containedTextButtonDefault())
+            morph(morphFabric.containedTextButtonDefault())
         }
 
         // Круговой прогресс из градиентной окружности по кромке
         viewBinding.buttonCircularGradientProgress.apply {
             setOnClickListener {
                 if (isMultiStateButtonInTextMode) {
-                    // todo Progress
-                    progress(morphFabric.progressCircularGradientNavyWhite())
+                    morphToProgress(morphFabric.progressCircularGradientNavyWhite())
                     Handler(Looper.getMainLooper()).postDelayed({
-                        result(morphFabric.outlinedIconButtonBlueBackNavyStroke())
-                    }, 2000)
+                        morphToResult(morphFabric.outlinedIconButtonBlueBackNavyStroke())
+                    }, RESULT_DELAY)
                 } else {
-                    prepare(morphFabric.outlinedTextButtonWhiteBackBlueStroke(R.integer.morph_duration_default))
+                    morph(morphFabric.outlinedTextButtonWhiteBackBlueStroke(R.integer.morph_duration_default))
                 }
                 isMultiStateButtonInTextMode = !isMultiStateButtonInTextMode
             }
-            prepare(morphFabric.outlinedTextButtonWhiteBackBlueStroke())
+            morph(morphFabric.outlinedTextButtonWhiteBackBlueStroke())
         }
 
         // Круговой прогресс из градиентной окружности внутри View
         viewBinding.buttonMts.apply {
             setOnClickListener {
                 if (isMtsButtonInTextMode) {
-                    progress(morphFabric.progressCircularGradientWhitePink())
+                    morphToProgress(morphFabric.progressCircularGradientWhitePink())
                     Handler(Looper.getMainLooper()).postDelayed({
-                        result(morphFabric.containedIconButtonGreenBackWhiteIcon())
-                    }, 2000)
+                        morphToResult(morphFabric.containedIconButtonGreenBackWhiteIcon())
+                    }, RESULT_DELAY)
                 } else {
-                    prepare(morphFabric.containedFabRedBackIconRight(R.integer.morph_duration_default))
+                    morph(morphFabric.containedFabRedBackIconRight(R.integer.morph_duration_default))
                 }
                 isMtsButtonInTextMode = !isMtsButtonInTextMode
             }
-            prepare(morphFabric.containedFabRedBackIconRight())
+            morph(morphFabric.containedFabRedBackIconRight())
         }
-//
-//        // Круговой прогресс из градиентной окружности точек внутри View
-//        viewBinding.buttonDotted.apply {
-//            setOnClickListener {
-//                if (isDottedButtonInTextMode) {
-//                    startCircularProgress(
-//                        primaryColor = Color.WHITE,
-//                        secondaryColor = color(R.color.ds_mts_red),
-//                        backgroundColor = color(R.color.ds_mts_red),
-//                        padding = dimen(R.dimen.cycle_progress_padding_4dp)
-//                    )
-//
-//                    Handler(Looper.getMainLooper()).postDelayed({
-//                        stopCircularProgress(
-//                            OpResult.Success,
-//                            color(android.R.color.holo_blue_light),
-//                            color(android.R.color.holo_blue_dark),
-//                            color(android.R.color.holo_red_light),
-//                            color(android.R.color.holo_red_dark),
-//                        )
-//                    }, 2000)
-//                } else {
-//                    morphToFabRect(
-//                        integer(R.integer.animation_duration),
-//                        string(R.string.button_text_circle_dots_gradient)
-//                    )
-//                }
-//                isDottedButtonInTextMode = !isDottedButtonInTextMode
-//            }
-//            morphToFabRect(0, string(R.string.button_text_circle_dots_gradient))
-//        }
-//
-//        viewBinding.buttonDottedOutlined.apply {
-//            setOnClickListener {
-//                //button_text_circle_dots_gradient_edge
-//                if (isLineAndDottedButtonInTextMode) {
-//                    startCircularProgress(
-//                        primaryColor = Color.WHITE,
-//                        secondaryColor = color(R.color.ds_mts_red),
-//                        backgroundColor = color(R.color.ds_mts_red),
-//                        padding = dimen(R.dimen.cycle_progress_padding_4dp)
-//                    )
-//
-//                    Handler(Looper.getMainLooper()).postDelayed({
-//                        stopCircularProgress(
-//                            OpResult.Success,
-//                            color(android.R.color.white),
-//                            color(R.color.gray_A200),
-//                            color(android.R.color.holo_red_light),
-//                            color(android.R.color.holo_red_dark),
-//                            color(R.color.ds_mts_red),
-//                            dimen(R.dimen.cycle_outline_stroke_width_2dp).toInt(),
-//                            R.drawable.ic_done_red,
-//                            R.drawable.ic_error
-//                        )
-//                    }, 2000)
-//                } else {
-//                    morphToFabRect(
-//                        integer(R.integer.animation_duration),
-//                        string(R.string.button_text_circle_dots_gradient_edge)
-//                    )
-//                }
-//
-//                isLineAndDottedButtonInTextMode = !isLineAndDottedButtonInTextMode
-//            }
-//            morphToFabRect(0, string(R.string.button_text_circle_dots_gradient_edge))
-//        }
+
+        // Круговой прогресс из градиентной окружности точек внутри View
+        viewBinding.buttonDotted.apply {
+            setOnClickListener {
+                if (isDottedButtonInTextMode) {
+                    morphToProgress(morphFabric.progressCircularWhiteGradientDots())
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        morphToResult(morphFabric.containedIconButtonRedBackWhiteIcon())
+                    }, RESULT_DELAY)
+                } else {
+                    morph(morphFabric.containedFabRedBackIconRight(R.integer.morph_duration_default))
+                }
+                isDottedButtonInTextMode = !isDottedButtonInTextMode
+            }
+            morph(morphFabric.containedFabRedBackIconRight())
+        }
+
+        viewBinding.buttonDottedOutlined.apply {
+            setOnClickListener {
+                if (isLineAndDottedButtonInTextMode) {
+                    morphToProgress(morphFabric.progressCircularWhiteGradientDots())
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        morphToResult(morphFabric.outlinedIconButtonWhiteBackRedStroke())
+                    }, RESULT_DELAY)
+                } else {
+                    morph(morphFabric.containedFabRedBackIconRight(R.integer.morph_duration_default))
+                }
+                isLineAndDottedButtonInTextMode = !isLineAndDottedButtonInTextMode
+            }
+            morph(morphFabric.containedFabRedBackIconRight())
+        }
+
+        viewBinding.buttonDottedOutlinedWhite.apply {
+            setOnClickListener {
+                if (isLineAndDottedWhiteButtonInTextMode) {
+                    morphToProgress(morphFabric.progressCircularRedGradientDots())
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        morphToResult(morphFabric.outlinedIconButtonWhiteBackRedStroke())
+                    }, RESULT_DELAY)
+                } else {
+                    morph(morphFabric.outlinedFabWhiteBackRedStroke(R.integer.morph_duration_default))
+                }
+                isLineAndDottedWhiteButtonInTextMode = !isLineAndDottedWhiteButtonInTextMode
+            }
+            morph(morphFabric.outlinedFabWhiteBackRedStroke())
+        }
     }
 
-    //region ""
-    private fun MorphingButton.morphToWhiteRectWithBlueTextAndBorder() {
-        morphToRect(
-            integer(R.integer.animation_duration),
-            string(R.string.button_text_simple),
-            color(android.R.color.white),
-            color(android.R.color.darker_gray),
-            color(android.R.color.holo_blue_dark),
-            dimen(R.dimen.cycle_outline_stroke_width_2dp).toInt()
-        )
+    companion object {
+        const val RESULT_DELAY = 2000L
     }
-
-    private fun MorphingButton.morphToSuccessWithOrangeIconAndBorder() {
-        morphToSuccess(
-            color(R.color.brown_normal),
-            color(R.color.brown_dark),
-            color(android.R.color.holo_orange_dark),
-            dimen(R.dimen.cycle_outline_stroke_width_2dp).toInt(),
-            R.drawable.ic_done_orange
-        )
-    }
-
-    private fun ProgressMorphingButton.stopCircularProgressWithDarkBlueIconAndBorder() {
-        stopCircularProgress(
-            OpResult.Success,
-            color(android.R.color.holo_blue_light),
-            color(android.R.color.holo_blue_dark),
-            color(android.R.color.holo_red_light),
-            color(android.R.color.holo_red_dark),
-            color(R.color.navy),
-            dimen(R.dimen.cycle_outline_stroke_width_3dp).toInt(),
-            R.drawable.ic_done_navy,
-            R.drawable.ic_error
-        )
-    }
-    //endregion
-
 }

@@ -2,11 +2,9 @@ package dev.barabu.morph.impl
 
 import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.Path
 import android.graphics.RectF
 import android.util.AttributeSet
-import dev.barabu.morph.button.AnchorIcon
 import dev.barabu.morph.button.MorphingAnimation
 import dev.barabu.morph.button.ProgressMorphingButton
 import dev.barabu.morph.generator.InterruptibleProgressGenerator
@@ -120,45 +118,6 @@ class CircularColoredProgressButton : ProgressMorphingButton {
 
         postProgressOp = { morph(params) }
         (generator as InterruptibleProgressGenerator).interrupt()
-    }
-
-    override fun morphToResult(
-        colorNormal: Int,
-        colorPressed: Int,
-        cornerRadius: Float,
-        width: Int,
-        height: Int,
-        duration: Int,
-        iconId: Int,
-        strokeColor: Int,
-        strokeWidth: Int
-    ) {
-
-        (generator as InterruptibleProgressGenerator).interrupt()
-
-        postProgressOp = {
-            val params = Params(
-                cornerRadius = cornerRadius,
-                width = width,
-                height = height,
-                colorNormal = colorNormal,
-                colorPressed = colorPressed,
-                colorText = Color.WHITE,
-                duration = duration,
-                icon = AnchorIcon(l = iconId),
-                strokeColor = strokeColor,
-                strokeWidth = strokeWidth,
-                animationListener = object : MorphingAnimation.Listener {
-                    override fun onAnimationStart() {
-                    }
-
-                    override fun onAnimationEnd() {
-                        unBlockTouch()
-                    }
-                }
-            )
-            morph(params)
-        }
     }
 
     override fun updateProgress(progress: Int) {

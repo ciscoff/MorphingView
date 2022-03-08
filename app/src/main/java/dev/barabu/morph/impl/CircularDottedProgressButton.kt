@@ -3,7 +3,6 @@ package dev.barabu.morph.impl
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
-import dev.barabu.morph.button.AnchorIcon
 import dev.barabu.morph.button.Gradient
 import dev.barabu.morph.button.MorphingAnimation
 import dev.barabu.morph.button.ProgressMorphingButton
@@ -104,76 +103,30 @@ class CircularDottedProgressButton : ProgressMorphingButton, Gradient {
         }
     }
 
-    override fun morphToProgress(
-        color: Int,
-        progressPrimaryColor: Int,
-        progressSecondaryColor: Int,
-        progressCornerRadius: Float,
-        width: Int,
-        height: Int,
-        duration: Int,
-        ringPadding: Float,
-        strokeColor: Int,
-        strokeWidth: Int
-    ) {
-
-        this.sweepGradient =
-            SweepGradient(width / 2f, height / 2f, progressPrimaryColor, progressSecondaryColor)
-
-        super.morphToProgress(
-            color,
-            progressPrimaryColor,
-            progressSecondaryColor,
-            progressCornerRadius,
-            width,
-            height,
-            duration,
-            ringPadding,
-            strokeColor,
-            strokeWidth
+    override fun morphToProgress(progressParams: ProgressParams) {
+        this.sweepGradient = SweepGradient(
+            progressParams.width / 2f,
+            progressParams.height / 2f,
+            progressParams.colorPrimary,
+            progressParams.colorSecondary
         )
+        super.morphToProgress(progressParams)
     }
 
     override fun morphToResult(params: Params) {
-        TODO("Not yet implemented")
-    }
-
-    override fun morphToResult(
-        colorNormal: Int,
-        colorPressed: Int,
-        cornerRadius: Float,
-        width: Int,
-        height: Int,
-        duration: Int,
-        iconId: Int,
-        strokeColor: Int,
-        strokeWidth: Int
-    ) {
-        (generator as InterruptibleProgressGenerator).interrupt()
-
-        postProgressOp = {
-            val params = Params(
-                cornerRadius = cornerRadius,
-                width = width,
-                height = height,
-                colorNormal = colorNormal,
-                colorPressed = colorPressed,
-                colorText = Color.WHITE,
-                duration = duration,
-                icon = AnchorIcon(l = iconId),
-                strokeColor = strokeColor,
-                strokeWidth = strokeWidth,
-                animationListener = object : MorphingAnimation.Listener {
-                    override fun onAnimationStart() {
-                    }
-
-                    override fun onAnimationEnd() {
-                        unBlockTouch()
-                    }
+        params.apply {
+            animationListener = object : MorphingAnimation.Listener {
+                override fun onAnimationStart() {
                 }
-            )
-            morph(params)
+
+                override fun onAnimationEnd() {
+                    unBlockTouch()
+                }
+            }
         }
+
+        postProgressOp = { morph(params) }
+        (generator as InterruptibleProgressGenerator).interrupt()
     }
 
     override fun updateProgress(progress: Int) {
