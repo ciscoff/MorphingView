@@ -11,7 +11,7 @@ import dev.barabu.morph.generator.ProgressGenerator
 import kotlin.math.PI
 import kotlin.math.min
 
-class CircularDottedProgressButton : ProgressMorphingButton, Gradient {
+class CircularDottedOutlinedProgressButton : ProgressMorphingButton, Gradient {
 
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
@@ -103,16 +103,6 @@ class CircularDottedProgressButton : ProgressMorphingButton, Gradient {
         }
     }
 
-    override fun morphToProgress(progressParams: ProgressParams) {
-        this.sweepGradient = SweepGradient(
-            progressParams.width / 2f,
-            progressParams.height / 2f,
-            progressParams.colorPrimary,
-            progressParams.colorSecondary
-        )
-        super.morphToProgress(progressParams)
-    }
-
     override fun morphToResult(params: Params) {
         params.apply {
             animationListener = object : MorphingAnimation.Listener {
@@ -127,6 +117,16 @@ class CircularDottedProgressButton : ProgressMorphingButton, Gradient {
 
         postProgressOp = { morph(params) }
         (generator as InterruptibleProgressGenerator).interrupt()
+    }
+
+    override fun morphToProgress(progressParams: ProgressParams) {
+        this.sweepGradient = SweepGradient(
+            progressParams.width / 2f,
+            progressParams.height / 2f,
+            progressParams.colorPrimary,
+            progressParams.colorSecondary
+        )
+        super.morphToProgress(progressParams)
     }
 
     override fun updateProgress(progress: Int) {

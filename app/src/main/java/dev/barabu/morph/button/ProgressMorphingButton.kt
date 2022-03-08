@@ -44,30 +44,18 @@ abstract class ProgressMorphingButton : MorphingButton, ProgressConsumer {
         invalidate()
     }
 
-    open fun morphToProgress(
-        color: Int,
-        progressPrimaryColor: Int,
-        progressSecondaryColor: Int,
-        progressCornerRadius: Float,
-        width: Int,
-        height: Int,
-        duration: Int,
-        ringPadding: Float = 0f
-    ) {
-        this.cornerRadius = progressCornerRadius
-        this.primaryColor = progressPrimaryColor
-        this.secondaryColor = progressSecondaryColor
-        this.ringPadding = ringPadding
+    /**
+     * Любой morph - это смена пары цветов colorNormal/colorPressed
+     */
+    open fun morphToProgress(progressParams: ProgressParams) {
+
+        this.primaryColor = progressParams.colorPrimary
+        this.secondaryColor = progressParams.colorSecondary
+        this.ringPadding = progressParams.ringPadding
 
         blockTouch()
 
-        val params = Params(
-            cornerRadius = progressCornerRadius,
-            width = width,
-            height = height,
-            colorNormal = color,
-            colorPressed = color,
-            duration = duration,
+        val params = progressParams.toParams().apply {
             animationListener = object : MorphingAnimation.Listener {
                 override fun onAnimationStart() {
                 }
@@ -77,19 +65,11 @@ abstract class ProgressMorphingButton : MorphingButton, ProgressConsumer {
                     generator.start(this@ProgressMorphingButton)
                 }
             }
-        )
+        }
         morph(params)
     }
 
-    abstract fun morphToResult(
-        colorNormal: Int,
-        colorPressed: Int,
-        cornerRadius: Float,
-        width: Int,
-        height: Int,
-        duration: Int,
-        iconId: Int
-    )
+    abstract fun morphToResult(params: Params)
 
     /**
      * Region.Op.DIFFERENCE - для рисования выбирается область первого прямоугольника
@@ -99,11 +79,11 @@ abstract class ProgressMorphingButton : MorphingButton, ProgressConsumer {
      * Визуально работу различных Region.Op можно посмотреть тут:
      * https://startandroid.ru/ru/uroki/vse-uroki-spiskom/325-urok-147-risovanie-region.html
      */
-    protected fun clipPathCompat(canvas: Canvas, path: Path) {
+    protected fun Canvas.clipPathCompat(path: Path) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            canvas.clipOutPath(path)
+            clipOutPath(path)
         } else {
-            canvas.clipPath(path, Region.Op.DIFFERENCE)
+            clipPath(path, Region.Op.DIFFERENCE)
         }
     }
 }
