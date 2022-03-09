@@ -22,9 +22,9 @@
     <color name="cycle_progress_tail">#d7ffd9</color>
     <color name="cycle_progress_clipping">#ffffff</color>
 
-    <color name="linear_progress_background">@android:color/white</color>
     <color name="linear_progress_primary">#388e3c</color>
     <color name="linear_progress_secondary">#d7ffd9</color>
+    <color name="linear_progress_background">#f2f2f2</color>
 
     <color name="ds_mts_red">#e30611</color>
     <color name="ds_mts_pink">#ffcccc</color>

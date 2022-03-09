@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(viewBinding.root)
 
-        // Простой morph формы и цвета
+        // 1. Простой morph формы и цвета
         viewBinding.buttonText.apply {
             setOnClickListener {
                 if (isRectButtonInTextMode) {
@@ -38,10 +38,11 @@ class MainActivity : AppCompatActivity() {
                 }
                 isRectButtonInTextMode = !isRectButtonInTextMode
             }
+            elevation = 0f
             morph(morphFabric.containedTextButtonDefault())
         }
 
-        // Горизонтальная линия прогресса
+        // 2. Горизонтальная линия прогресса
         viewBinding.buttonLinearProgress.apply {
             setOnClickListener {
                 if (isLinearProgressButtonInTextMode) {
@@ -51,10 +52,11 @@ class MainActivity : AppCompatActivity() {
                 }
                 isLinearProgressButtonInTextMode = !isLinearProgressButtonInTextMode
             }
+            elevation = 0f
             morph(morphFabric.containedTextButtonDefault())
         }
 
-        // Круговой прогресс из одноцветного сегмента
+        // 3. Круговой прогресс из одноцветного сегмента
         viewBinding.buttonCircularColoredProgress.apply {
             setOnClickListener {
                 if (isCycleProgressButtonInTextMode) {
@@ -67,10 +69,11 @@ class MainActivity : AppCompatActivity() {
                 }
                 isCycleProgressButtonInTextMode = !isCycleProgressButtonInTextMode
             }
+            elevation = 0f
             morph(morphFabric.containedTextButtonDefault())
         }
 
-        // Круговой прогресс из градиентной окружности по кромке
+        // 4. Круговой прогресс из градиентной окружности по кромке
         viewBinding.buttonCircularGradientProgress.apply {
             setOnClickListener {
                 if (isMultiStateButtonInTextMode) {
@@ -83,10 +86,11 @@ class MainActivity : AppCompatActivity() {
                 }
                 isMultiStateButtonInTextMode = !isMultiStateButtonInTextMode
             }
+            elevation = 0f
             morph(morphFabric.outlinedTextButtonWhiteBackBlueStroke())
         }
 
-        // Круговой прогресс из градиентной окружности внутри View
+        // 5. Круговой прогресс из градиентной окружности внутри View
         viewBinding.buttonMts.apply {
             setOnClickListener {
                 if (isMtsButtonInTextMode) {
@@ -99,14 +103,15 @@ class MainActivity : AppCompatActivity() {
                 }
                 isMtsButtonInTextMode = !isMtsButtonInTextMode
             }
+            elevation = 0f
             morph(morphFabric.containedFabRedBackIconRight())
         }
 
-        // Круговой прогресс из градиентной окружности точек внутри View
+        // 6. Круговой прогресс из градиентной окружности точек внутри View
         viewBinding.buttonDotted.apply {
             setOnClickListener {
                 if (isDottedButtonInTextMode) {
-                    morphToProgress(morphFabric.progressCircularWhiteGradientDots())
+                    morphToProgress(morphFabric.progressCircularRedBackWhiteGradientDots())
                     Handler(Looper.getMainLooper()).postDelayed({
                         morphToResult(morphFabric.containedIconButtonRedBackWhiteIcon())
                     }, RESULT_DELAY)
@@ -118,10 +123,11 @@ class MainActivity : AppCompatActivity() {
             morph(morphFabric.containedFabRedBackIconRight())
         }
 
+        // 7.
         viewBinding.buttonDottedOutlined.apply {
             setOnClickListener {
                 if (isLineAndDottedButtonInTextMode) {
-                    morphToProgress(morphFabric.progressCircularWhiteGradientDots())
+                    morphToProgress(morphFabric.progressCircularRedBackWhiteGradientDots())
                     Handler(Looper.getMainLooper()).postDelayed({
                         morphToResult(morphFabric.outlinedIconButtonWhiteBackRedStroke())
                     }, RESULT_DELAY)
@@ -130,13 +136,15 @@ class MainActivity : AppCompatActivity() {
                 }
                 isLineAndDottedButtonInTextMode = !isLineAndDottedButtonInTextMode
             }
+            elevation = 0f
             morph(morphFabric.containedFabRedBackIconRight())
         }
 
+        // 8.
         viewBinding.buttonDottedOutlinedWhite.apply {
             setOnClickListener {
                 if (isLineAndDottedWhiteButtonInTextMode) {
-                    morphToProgress(morphFabric.progressCircularRedGradientDots())
+                    morphToProgress(morphFabric.progressCircularWhiteBackRedGradientDots())
                     Handler(Looper.getMainLooper()).postDelayed({
                         morphToResult(morphFabric.outlinedIconButtonWhiteBackRedStroke())
                     }, RESULT_DELAY)
@@ -145,6 +153,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 isLineAndDottedWhiteButtonInTextMode = !isLineAndDottedWhiteButtonInTextMode
             }
+            elevation = 0f
             morph(morphFabric.outlinedFabWhiteBackRedStroke())
         }
     }

@@ -49,6 +49,7 @@ abstract class ProgressMorphingButton : MorphingButton, ProgressConsumer {
      */
     open fun morphToProgress(progressParams: ProgressParams) {
 
+        // Цвета и отступ кольца прогресса от края View, которые используются в onDraw
         this.primaryColor = progressParams.colorPrimary
         this.secondaryColor = progressParams.colorSecondary
         this.ringPadding = progressParams.ringPadding

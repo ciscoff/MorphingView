@@ -29,14 +29,17 @@ class CircularDottedProgressButton : ProgressMorphingButton, Gradient {
     private lateinit var pathDot: Path
 
     /**
+     * Диаметр окружности, на которой будут лежать ЦЕНТРЫ точек.
+     */
+    private val dotsGuidelineDiameter: Float
+        get() = min(width, height) * DOTS_GUIDELINE_RATIO
+
+    /**
      * Расчитать размеры точки в колесе прогресса. Размер точек и промежутков между ними одинаковы.
      * Поэтому длину окружности делим на удвоенное количество точек.
      */
     private val dotSize: Float
-        get() {
-            val circleDiameter = min(width, height) - ringPadding * 2
-            return (circleDiameter * PI.toFloat()) / (DOTS_QTY * 2)
-        }
+        get() = (dotsGuidelineDiameter * PI.toFloat()) / (DOTS_QTY * 2)
 
     /**
      * Paint для заливки точек прогресса. Она будет красить градиентом.
@@ -64,12 +67,10 @@ class CircularDottedProgressButton : ProgressMorphingButton, Gradient {
             progress > ProgressGenerator.MIN_PROGRESS &&
             progress <= ProgressGenerator.MAX_PROGRESS
         ) {
-            val circleSize = min(width, height) - ringPadding * 2
-
             if (!::pathProgress.isInitialized) {
                 // контур прогресса - кольцо
                 pathProgress = Path().apply {
-                    addCircle(width / 2f, height / 2f, circleSize / 2f, Path.Direction.CW)
+                    addCircle(width / 2f, height / 2f, dotsGuidelineDiameter / 2f, Path.Direction.CW)
                 }
 
                 // отдельная точка
@@ -139,5 +140,11 @@ class CircularDottedProgressButton : ProgressMorphingButton, Gradient {
          * Количество точек в колесе прогресса
          */
         private const val DOTS_QTY = 12
+
+        /**
+         * Отношение ширины окружности, на контуре которой будут лежать ЦЕНТРЫ точек
+         * к ширине View.
+         */
+        private const val DOTS_GUIDELINE_RATIO = 0.8f
     }
 }
