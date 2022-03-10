@@ -156,6 +156,17 @@ class MainActivity : AppCompatActivity() {
             elevation = 0f
             morph(morphFabric.outlinedFabWhiteBackRedStroke())
         }
+
+        viewBinding.runnerView.apply {
+            setOnClickListener {
+                swapAnimation()
+            }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewBinding.runnerView.swapAnimation()
     }
 
     companion object {

@@ -1,16 +1,17 @@
 package dev.barabu.runner
 
 import android.content.Context
+import android.graphics.Canvas
 import android.graphics.Color
-import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.View
-import androidx.annotation.ColorInt
-import dev.barabu.morph.button.AnchorIcon
-import dev.barabu.morph.button.MorphingAnimation
-import dev.barabu.morph.button.MorphingButton
+import android.view.animation.AccelerateDecelerateInterpolator
+import android.view.animation.AccelerateInterpolator
+import android.view.animation.DecelerateInterpolator
+import dev.barabu.morph.R
+import dev.barabu.morph.extentions.color
 
-class RunnerView: View, Drawable.Callback {
+class RunnerView : View {
 
     constructor(context: Context) : super(context) {
         initView()
@@ -20,28 +21,65 @@ class RunnerView: View, Drawable.Callback {
         initView()
     }
 
+    private var elasticDrawable: ElasticDrawable? = null
 
-    fun initView() {
+    private var isProgress: Boolean = false
 
-    }
-
-    data class Params(
-        val cornerRadius: Float,
-        val width: Int,
-        val height: Int,
-        @ColorInt val colorForeground: Int,
-        @ColorInt val colorBackground: Int,
-        @ColorInt val strokeColor: Int = Color.TRANSPARENT,
-        val strokeWidth: Int = STROKE_WIDTH_ZERO,
-        val duration: Int = 0,
-        val text: String? = null,
-        val icon: AnchorIcon = AnchorIcon(),
-        var animationListener: MorphingAnimation.Listener? = null
+    private var params: ElasticDrawable.Params = ElasticDrawable.Params(
+        headInterpolator = DecelerateInterpolator(0.9f),
+        tailInterpolator = AccelerateInterpolator(),
+        0,
+        0,
+        1000L,
+        context.color(R.color.linear_elastic_foreground)
     )
 
-    companion object {
-        private const val STROKE_WIDTH_ZERO = 0
-
+    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+        super.onSizeChanged(w, h, oldw, oldh)
+        params = params.copy(moveTo = w)
     }
 
+    private fun initView() {
+    }
+
+    fun startAnimation() {
+        isProgress = true
+        elasticDrawable?.start()
+    }
+
+    fun stopAnimation() {
+        isProgress = false
+        elasticDrawable?.stop()
+    }
+
+    fun swapAnimation() {
+        if (isProgress) stopAnimation() else startAnimation()
+    }
+
+    override fun onDraw(canvas: Canvas) {
+        super.onDraw(canvas)
+
+        if (isProgress) {
+            drawProgress(canvas)
+        }
+    }
+
+    private fun drawProgress(canvas: Canvas) {
+
+        if (elasticDrawable == null || elasticDrawable?.isRunning == false) {
+
+            val l = 0
+            val t = 0
+            val r = width
+            val b = height
+
+            elasticDrawable = ElasticDrawable(this, params).apply {
+                setBounds(l, t, r, b)
+                callback = this@RunnerView
+                start()
+            }
+        } else {
+            elasticDrawable?.draw(canvas)
+        }
+    }
 }
