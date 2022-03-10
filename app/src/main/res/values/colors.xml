@@ -16,15 +16,18 @@
     <color name="default_color_normal">@android:color/holo_blue_light</color>
     <color name="default_color_pressed">@android:color/holo_blue_dark</color>
 
+    <color name="linear_elastic_background">#b3e5fc</color>
+    <color name="linear_elastic_foreground">#29b6f6</color>
+
     <color name="cycle_progress_foreground">#388e3c</color>
     <color name="cycle_progress_background">#d7ffd9</color>
     <color name="cycle_progress_head">#388e3c</color>
     <color name="cycle_progress_tail">#d7ffd9</color>
     <color name="cycle_progress_clipping">#ffffff</color>
 
-    <color name="linear_progress_background">@android:color/white</color>
     <color name="linear_progress_primary">#388e3c</color>
     <color name="linear_progress_secondary">#d7ffd9</color>
+    <color name="linear_progress_background">#f2f2f2</color>
 
     <color name="ds_mts_red">#e30611</color>
     <color name="ds_mts_pink">#ffcccc</color>

@@ -8,13 +8,11 @@ import android.graphics.drawable.StateListDrawable
 import android.util.AttributeSet
 import android.util.StateSet
 import androidx.annotation.ColorInt
-import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.content.ContextCompat
 import dev.barabu.morph.GradientDrawableDelegate
 import dev.barabu.morph.R
-import dev.barabu.morph.extentions.color
 
 /**
  * БЛЯ !!!!
@@ -48,14 +46,16 @@ open class MorphingButton : AppCompatButton {
     lateinit var drawablePressed: GradientDrawableDelegate
     private lateinit var padding: Padding
 
+    //region Defaults
     protected var cornerRadius = resources.getDimension(R.dimen.corner_radius_2dp)
     protected var isMorphingInProgress: Boolean = false
 
-    private var colorNormal = context.color(android.R.color.holo_blue_light)
-    private var colorPressed = context.color(android.R.color.holo_blue_dark)
-    private var colorText = context.color(android.R.color.white)
+    private var colorNormal = Color.TRANSPARENT
+    private var colorPressed = Color.TRANSPARENT
+    private var colorText = Color.TRANSPARENT
     private var strokeColor = Color.TRANSPARENT
     private var strokeWidth = STROKE_WIDTH_ZERO
+    //endregion
 
     private fun initView() {
         padding = Padding(paddingLeft, paddingTop, paddingRight, paddingBottom)
@@ -68,6 +68,16 @@ open class MorphingButton : AppCompatButton {
             addState(StateSet.WILD_CARD, drawableNormal.gradientDrawable)
         }
         setBackground(background)
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    fun blockTouch() {
+        setOnTouchListener { _, _ -> true }
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    fun unBlockTouch() {
+        setOnTouchListener { _, _ -> false }
     }
 
     /**
@@ -98,16 +108,6 @@ open class MorphingButton : AppCompatButton {
         colorNormal = params.colorNormal
         strokeColor = params.strokeColor
         strokeWidth = params.strokeWidth
-    }
-
-    @SuppressLint("ClickableViewAccessibility")
-    fun blockTouch() {
-        setOnTouchListener { _, _ -> true }
-    }
-
-    @SuppressLint("ClickableViewAccessibility")
-    fun unBlockTouch() {
-        setOnTouchListener { _, _ -> false }
     }
 
     private fun morphWithoutAnimation(params: Params) {
@@ -253,7 +253,7 @@ open class MorphingButton : AppCompatButton {
         val ringPadding: Float = 0f,
         var animationListener: MorphingAnimation.Listener? = null
     ) {
-        fun toParams() : Params = Params(
+        fun toParams(): Params = Params(
             cornerRadius = cornerRadius,
             width = width,
             height = height,
