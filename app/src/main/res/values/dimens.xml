@@ -14,6 +14,7 @@
     <dimen name="button_outline_stroke_width_2dp">2dp</dimen>
     <dimen name="button_outline_stroke_width_3dp">3dp</dimen>
     <dimen name="button_outline_stroke_width_4dp">4dp</dimen>
+    <dimen name="cycle_progress_stroke_width_8dp">8dp</dimen>
     <dimen name="cycle_progress_stroke_width_5dp">5dp</dimen>
     <dimen name="cycle_progress_stroke_width_4dp">4dp</dimen>
     <dimen name="cycle_outline_stroke_width_2dp">2dp</dimen>

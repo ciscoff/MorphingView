@@ -167,6 +167,7 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         viewBinding.runnerView.swapAnimation()
+        viewBinding.runnerCircularView.swapAnimation()
     }
 
     companion object {

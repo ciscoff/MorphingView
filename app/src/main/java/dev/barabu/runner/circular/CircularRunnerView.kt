@@ -1,17 +1,19 @@
-package dev.barabu.runner
+package dev.barabu.runner.circular
 
 import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Color
 import android.util.AttributeSet
 import android.view.View
-import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
+import android.view.animation.LinearInterpolator
+import android.view.animation.PathInterpolator
 import dev.barabu.morph.R
 import dev.barabu.morph.extentions.color
+import dev.barabu.morph.extentions.dimen
+import dev.barabu.runner.linear.LinearElasticDrawable
 
-class RunnerView : View {
+class CircularRunnerView : View {
 
     constructor(context: Context) : super(context) {
         initView()
@@ -21,35 +23,29 @@ class RunnerView : View {
         initView()
     }
 
-    private var elasticDrawable: ElasticDrawable? = null
+    private var circularElasticDrawable: CircularElasticDrawable? = null
 
     private var isProgress: Boolean = false
 
-    private var params: ElasticDrawable.Params = ElasticDrawable.Params(
+    private var params: CircularElasticDrawable.Params = CircularElasticDrawable.Params(
         headInterpolator = DecelerateInterpolator(0.9f),
         tailInterpolator = AccelerateInterpolator(),
-        0,
-        0,
+        context.dimen(R.dimen.cycle_progress_stroke_width_8dp),
         1000L,
         context.color(R.color.linear_elastic_foreground)
     )
-
-    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-        super.onSizeChanged(w, h, oldw, oldh)
-        params = params.copy(moveTo = w)
-    }
 
     private fun initView() {
     }
 
     fun startAnimation() {
         isProgress = true
-        elasticDrawable?.start()
+        circularElasticDrawable?.start()
     }
 
     fun stopAnimation() {
         isProgress = false
-        elasticDrawable?.stop()
+        circularElasticDrawable?.stop()
     }
 
     fun swapAnimation() {
@@ -66,20 +62,19 @@ class RunnerView : View {
 
     private fun drawProgress(canvas: Canvas) {
 
-        if (elasticDrawable == null || elasticDrawable?.isRunning == false) {
-
+        if (circularElasticDrawable == null || circularElasticDrawable?.isRunning == false) {
             val l = 0
             val t = 0
             val r = width
             val b = height
 
-            elasticDrawable = ElasticDrawable(this, params).apply {
+            circularElasticDrawable = CircularElasticDrawable(this, params).apply {
                 setBounds(l, t, r, b)
-                callback = this@RunnerView
+                callback = this@CircularRunnerView
                 start()
             }
         } else {
-            elasticDrawable?.draw(canvas)
+            circularElasticDrawable?.draw(canvas)
         }
     }
 }
