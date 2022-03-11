@@ -6,14 +6,11 @@ import android.util.AttributeSet
 import android.view.View
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
-import android.view.animation.LinearInterpolator
-import android.view.animation.PathInterpolator
 import dev.barabu.morph.R
 import dev.barabu.morph.extentions.color
 import dev.barabu.morph.extentions.dimen
-import dev.barabu.runner.linear.LinearElasticDrawable
 
-class CircularRunnerView : View {
+class SimpleCircularRunnerView : View {
 
     constructor(context: Context) : super(context) {
         initView()
@@ -23,16 +20,16 @@ class CircularRunnerView : View {
         initView()
     }
 
-    private var circularElasticDrawable: CircularElasticDrawable? = null
+    private var circularElasticDrawable: SimpleCircularElasticDrawable? = null
 
     private var isProgress: Boolean = false
 
-    private var params: CircularElasticDrawable.Params = CircularElasticDrawable.Params(
+    private var params: SimpleCircularElasticDrawable.Params = SimpleCircularElasticDrawable.Params(
         headInterpolator = DecelerateInterpolator(0.9f),
         tailInterpolator = AccelerateInterpolator(),
-        context.dimen(R.dimen.cycle_progress_stroke_width_8dp),
-        1000L,
-        context.color(R.color.linear_elastic_foreground)
+        strokeWidth = context.dimen(R.dimen.cycle_progress_stroke_width_8dp),
+        duration = 1000L,
+        color = context.color(R.color.linear_elastic_foreground)
     )
 
     private fun initView() {
@@ -68,9 +65,9 @@ class CircularRunnerView : View {
             val r = width
             val b = height
 
-            circularElasticDrawable = CircularElasticDrawable(this, params).apply {
+            circularElasticDrawable = SimpleCircularElasticDrawable(this, params).apply {
                 setBounds(l, t, r, b)
-                callback = this@CircularRunnerView
+                callback = this@SimpleCircularRunnerView
                 start()
             }
         } else {

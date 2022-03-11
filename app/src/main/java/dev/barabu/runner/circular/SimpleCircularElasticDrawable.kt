@@ -1,22 +1,19 @@
 package dev.barabu.runner.circular
 
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
 import android.animation.AnimatorSet
 import android.animation.ValueAnimator
 import android.graphics.*
 import android.graphics.drawable.Animatable
 import android.graphics.drawable.Drawable
-import android.util.Log
 import android.view.View
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
 import androidx.annotation.ColorInt
-import dev.barabu.morph.extentions.LOG_TAG
 
 //
-//    Диаграмма для расчета Sweep Angle, который меняется в диапазоне (0..180..0)
+//    Диаграмма для расчета sweepAngle, который меняется в диапазоне (0..180..0)
+//    При этом угол startAngle меняется в диапазоне (0..360)
 //
 //          Y (sweep angle)
 //          |
@@ -34,10 +31,14 @@ import dev.barabu.morph.extentions.LOG_TAG
 //         На участке прогресса (0..50) угол меняется как 'Y = X * 3.6'
 //         На участке прогресса (51..100) угол меняется как 'Y = 360 - X * 3.6'
 //
-//  NOTE: требуется доработка.
+//  NOTE: требуется доработка. При таком алгоритме в верхней точке графика "голова" прогресса
+//  начинает двигаться навстречу хвосту и только потом замедление головы становится правильным.
 //
+//  В итоге здесь применен тот же алгоритм, что и в LinearElasticDrawable - и голова и хвост
+//  анимируются по отдельности в диапазонах (0..360). При этом в качестве startAngle выступает
+//  текущее значение хвоста, а sweepAngle вычисляется как разница между головой и хвостом.
 
-class CircularElasticDrawable(
+class SimpleCircularElasticDrawable(
     private val parentView: View,
     private val params: Params
 ) : Drawable(), Animatable {
@@ -75,17 +76,6 @@ class CircularElasticDrawable(
         addUpdateListener { valueAnimator ->
             progress = valueAnimator.animatedValue as Float
         }
-
-        addListener(object : AnimatorListenerAdapter() {
-            override fun onAnimationRepeat(animation: Animator?) {
-                /*if (tailAngleAnimator.isRunning || headAngleAnimator.isRunning) {
-                    compositeAnimator.end()
-                    headAngleAnimator.setFloatValues(0f, 360f)
-                    tailAngleAnimator.setFloatValues(0f, 360f)
-                    compositeAnimator.start()
-                }*/
-            }
-        })
     }
 
     private val paint = Paint().apply {
@@ -93,6 +83,7 @@ class CircularElasticDrawable(
         isAntiAlias = true
         color = params.color
         strokeWidth = params.strokeWidth
+        strokeCap = Paint.Cap.ROUND
     }
 
     private var progress: Float = MIN_PROGRESS
@@ -171,6 +162,7 @@ class CircularElasticDrawable(
 
     override fun isRunning(): Boolean = progressAnimator.isRunning
 
+    // Это функции графика (см выше)
     private fun ascendingSweepAngle(progress: Float) = progress * 3.6f
     private fun descendingSweepAngle(progress: Float) = 360f - progress * 3.6f
 

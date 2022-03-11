@@ -168,6 +168,7 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
         viewBinding.runnerView.swapAnimation()
         viewBinding.runnerCircularView.swapAnimation()
+        viewBinding.runnerCircularViewAdvanced.swapAnimation()
     }
 
     companion object {
