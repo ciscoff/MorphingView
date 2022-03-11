@@ -13,8 +13,12 @@
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.273" />
         <entry key="app/src/main/res/drawable/ic_send.xml" value="0.2115" />
         <entry key="app/src/main/res/drawable/ic_send_red.xml" value="0.273" />
+        <entry key="app/src/main/res/drawable/shape_circular_runner.xml" value="0.165" />
+        <entry key="app/src/main/res/drawable/shape_circular_runner_blue.xml" value="0.128" />
+        <entry key="app/src/main/res/drawable/shape_linear_elastic_runner.xml" value="0.128" />
+        <entry key="app/src/main/res/drawable/shape_linear_runner_kion.xml" value="0.128" />
         <entry key="app/src/main/res/drawable/shape_oval.xml" value="0.242" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.25" />
       </map>
     </option>
   </component>

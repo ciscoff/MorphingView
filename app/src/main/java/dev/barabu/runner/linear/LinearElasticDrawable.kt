@@ -1,4 +1,4 @@
-package dev.barabu.runner
+package dev.barabu.runner.linear
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
@@ -38,10 +38,10 @@ import androidx.annotation.ColorInt
  * [head]/[tail]. Вместе с ними запускается третий аниматор [progressAnimator], который анимирует
  * величину прогресса в диапазоне (MIN_PROGRESS..MAX_PROGRESS). При каждом увеличении прогресса
  * он оповещает родительскую View вызовом parentView.invalidate(). Та в свою очередь попадает
- * в onDraw где и вызывает ElasticDrawable::draw. Последний метод читает текущие [head]/[tail] и
+ * в onDraw где и вызывает LinearElasticDrawable::draw. Последний метод читает текущие [head]/[tail] и
  * рисует между ними линию. Вот и все.
  */
-class ElasticDrawable(
+class LinearElasticDrawable(
     private val parentView: View,
     private val params: Params
 ) : Drawable(), Animatable {

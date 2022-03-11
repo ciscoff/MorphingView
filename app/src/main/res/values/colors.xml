@@ -17,8 +17,10 @@
     <color name="default_color_pressed">@android:color/holo_blue_dark</color>
 
     <color name="linear_elastic_background">#b3e5fc</color>
+    <color name="linear_elastic_background_kion">#88000000</color>
     <color name="linear_elastic_foreground">#29b6f6</color>
 
+    <color name="cycle_progress_foreground_kion">#caae53</color>
     <color name="cycle_progress_foreground">#388e3c</color>
     <color name="cycle_progress_background">#d7ffd9</color>
     <color name="cycle_progress_head">#388e3c</color>
